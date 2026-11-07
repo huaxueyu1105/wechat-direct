@@ -60,14 +60,23 @@ jobs:
       - name: Verify server asset digests
         shell: python
         run: |
-          import hashlib, json, os, pathlib, subprocess
-          data = json.loads(subprocess.check_output(['gh', 'api', 'repos/' + os.environ['GH_REPO'] + '/releases/tags/v2.4.2']))
-          assets = {a['name']: a for a in data['assets']}
-          for name in ['wechat-direct-2.4.2-windows-x64.zip', 'wechat-direct-2.4.2-source.zip', 'SHA256SUMS.txt']:
-              path = pathlib.Path('_release') / name
-              expected = 'sha256:' + hashlib.sha256(path.read_bytes()).hexdigest()
-              assert assets[name]['size'] == path.stat().st_size, name
-              assert assets[name]['digest'] == expected, name
-              print(name + ': server checksum verified')
+          import hashlib, json, os, pathlib, subprocess, sys, traceback
+          try:
+              repository = 'repos/' + os.environ['GH_REPO']
+              releases = json.loads(subprocess.check_output(['gh', 'api', repository + '/releases?per_page=100']))
+              data = next(item for item in releases if item['tag_name'] == 'v2.4.2')
+              assets = {a['name']: a for a in data['assets']}
+              for name in ['wechat-direct-2.4.2-windows-x64.zip', 'wechat-direct-2.4.2-source.zip', 'SHA256SUMS.txt']:
+                  path = pathlib.Path('_release') / name
+                  expected = hashlib.sha256(path.read_bytes()).hexdigest()
+                  asset = assets[name]
+                  assert asset['size'] == path.stat().st_size, name + ': size mismatch'
+                  downloaded = subprocess.check_output(['gh', 'api', '-H', 'Accept: application/octet-stream', repository + '/releases/assets/' + str(asset['id'])])
+                  assert hashlib.sha256(downloaded).hexdigest() == expected, name + ': downloaded checksum mismatch'
+                  print(name + ': server download checksum verified')
+          except Exception:
+              detail = traceback.format_exc().replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+              print('::error title=Release asset verification::' + detail)
+              sys.exit(1)
       - name: Publish verified experimental release
         run: gh release edit v2.4.2 --draft=false --prerelease
