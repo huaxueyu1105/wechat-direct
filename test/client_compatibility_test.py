@@ -37,7 +37,9 @@ class ClientSelectionTests(unittest.TestCase):
 
 class NativePreparationTests(unittest.TestCase):
     def setUp(self):
-        self.temp=tempfile.TemporaryDirectory();self.folder=Path(self.temp.name)
+        # Windows CI may expose TEMP through an 8.3 alias (RUNNER~1).
+        # Production resolves the private root before staging the driver.
+        self.temp=tempfile.TemporaryDirectory();self.folder=Path(self.temp.name).resolve()
         self.driver=self.folder/'test-driver.dll';self.driver.write_bytes(b'test-only')
         self.calls=[];self.stage='prepared';self.identity='123:creation-one'
         self.client=object.__new__(WeChat)
