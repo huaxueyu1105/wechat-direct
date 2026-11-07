@@ -54,7 +54,7 @@ jobs:
       - name: Create draft and upload assets
         run: |
           if ! gh release view v2.4.2 >/dev/null 2>&1; then
-            gh release create v2.4.2 --target d5f130f364ef6029e7a181aba9b84c025e359cf8 --title '微信直连 v2.4.2：首次开源发布' --notes-file docs/releases/v2.4.2.md --draft --prerelease
+            gh release create v2.4.2 --target ef01b68679d3e3d6d612acad2778ab0a68a1c041 --title '微信直连 v2.4.2：首次开源发布' --notes-file docs/releases/v2.4.2.md --draft --prerelease
           fi
           gh release upload v2.4.2 _release/wechat-direct-2.4.2-windows-x64.zip _release/wechat-direct-2.4.2-source.zip _release/SHA256SUMS.txt --clobber
       - name: Verify server asset digests
