@@ -1,6 +1,7 @@
 name: Offline tests
 on:
   push:
+    branches-ignore: ['release-upload/**']
   pull_request:
 permissions:
   contents: read

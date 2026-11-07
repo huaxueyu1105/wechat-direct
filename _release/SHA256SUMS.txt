@@ -1,0 +1,2 @@
+459a6dda6e29be3126561e0c0b36e9f30d95b2afb19a98cb24573ecaa24d7d21  wechat-direct-2.4.2-windows-x64.zip
+bf962bd846d80144110bc4f63ae686c468df3ef7162a95d3d737486abc60de70  wechat-direct-2.4.2-source.zip
