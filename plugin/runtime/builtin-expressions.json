@@ -1,0 +1,1865 @@
+{
+  "clientVersion": "4.2.0.13",
+  "coreSha256": "afe3d02c58bada3c35009c0cd58ee1f57b2a00fe53237d0dce649107fddb9a20",
+  "source": "client embedded emoji-panel and newemoji resources",
+  "items": [
+    {
+      "stickerId": "builtin:b620fcc72cbdadee",
+      "kind": "builtin",
+      "label": "微笑",
+      "text": "/::)",
+      "displayText": "[微笑]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:aedc5dea14bbdaef",
+      "kind": "builtin",
+      "label": "撇嘴",
+      "text": "/::~",
+      "displayText": "[撇嘴]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:f4ebc28997d0ff82",
+      "kind": "builtin",
+      "label": "色",
+      "text": "/::B",
+      "displayText": "[色]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:c1946eb6bc02b128",
+      "kind": "builtin",
+      "label": "发呆",
+      "text": "/::|",
+      "displayText": "[发呆]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:5aadf754c5a50cab",
+      "kind": "builtin",
+      "label": "得意",
+      "text": "/:8-)",
+      "displayText": "[得意]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:46be45107aa61a0a",
+      "kind": "builtin",
+      "label": "流泪",
+      "text": "/::<",
+      "displayText": "[流泪]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:24ac86ea1e539b36",
+      "kind": "builtin",
+      "label": "害羞",
+      "text": "/::$",
+      "displayText": "[害羞]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:edc1a6e383d36d55",
+      "kind": "builtin",
+      "label": "闭嘴",
+      "text": "/::X",
+      "displayText": "[闭嘴]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:0ced438e0f905676",
+      "kind": "builtin",
+      "label": "睡",
+      "text": "/::Z",
+      "displayText": "[睡]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:b18d105ff0c74e19",
+      "kind": "builtin",
+      "label": "大哭",
+      "text": "/::'(",
+      "displayText": "[大哭]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:171474431e350c4d",
+      "kind": "builtin",
+      "label": "尴尬",
+      "text": "/::-|",
+      "displayText": "[尴尬]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:9334e3e5d09e3bb1",
+      "kind": "builtin",
+      "label": "发怒",
+      "text": "/::@",
+      "displayText": "[发怒]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:3c51bddb9d2c4da2",
+      "kind": "builtin",
+      "label": "调皮",
+      "text": "/::P",
+      "displayText": "[调皮]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:2fbd7fd62d0a5c59",
+      "kind": "builtin",
+      "label": "呲牙",
+      "text": "/::D",
+      "displayText": "[呲牙]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:8d9d718f2ed1fed2",
+      "kind": "builtin",
+      "label": "惊讶",
+      "text": "/::O",
+      "displayText": "[惊讶]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:d63f317ec0a9d59c",
+      "kind": "builtin",
+      "label": "难过",
+      "text": "/::(",
+      "displayText": "[难过]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:05287763d6529a5f",
+      "kind": "builtin",
+      "label": "囧",
+      "text": "[Blush]",
+      "displayText": "[囧]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:e4e29dec6615dcf4",
+      "kind": "builtin",
+      "label": "抓狂",
+      "text": "/::Q",
+      "displayText": "[抓狂]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:5affede1d69daec5",
+      "kind": "builtin",
+      "label": "吐",
+      "text": "/::T",
+      "displayText": "[吐]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:7410d6370b9dc76a",
+      "kind": "builtin",
+      "label": "偷笑",
+      "text": "/:,@P",
+      "displayText": "[偷笑]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:57e7bd3a7bbb64d0",
+      "kind": "builtin",
+      "label": "愉快",
+      "text": "/:,@-D",
+      "displayText": "[愉快]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:3ac1feec0c5e25a9",
+      "kind": "builtin",
+      "label": "白眼",
+      "text": "/::d",
+      "displayText": "[白眼]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:76b44dbaea511060",
+      "kind": "builtin",
+      "label": "傲慢",
+      "text": "/:,@o",
+      "displayText": "[傲慢]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:b9f6c5364f33e648",
+      "kind": "builtin",
+      "label": "困",
+      "text": "/:|-)",
+      "displayText": "[困]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:89ba629827b81059",
+      "kind": "builtin",
+      "label": "惊恐",
+      "text": "/::!",
+      "displayText": "[惊恐]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:f2eeb391fa1a0e65",
+      "kind": "builtin",
+      "label": "憨笑",
+      "text": "/::>",
+      "displayText": "[憨笑]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:4248ff516265f9d6",
+      "kind": "builtin",
+      "label": "悠闲",
+      "text": "/::,@",
+      "displayText": "[悠闲]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:b3264fef92db4e03",
+      "kind": "builtin",
+      "label": "咒骂",
+      "text": "/::-S",
+      "displayText": "[咒骂]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:2d5f8714884d4e6a",
+      "kind": "builtin",
+      "label": "疑问",
+      "text": "/:?",
+      "displayText": "[疑问]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:7a3571ca01d582fd",
+      "kind": "builtin",
+      "label": "嘘",
+      "text": "/:,@x",
+      "displayText": "[嘘]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:9c632c32b1858284",
+      "kind": "builtin",
+      "label": "晕",
+      "text": "/:,@@",
+      "displayText": "[晕]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:bb6d14f795b13eac",
+      "kind": "builtin",
+      "label": "衰",
+      "text": "/:,@!",
+      "displayText": "[衰]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:b2ab81c47d7a8eb4",
+      "kind": "builtin",
+      "label": "骷髅",
+      "text": "/:!!!",
+      "displayText": "[骷髅]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:6c0a1ca44a84acd8",
+      "kind": "builtin",
+      "label": "敲打",
+      "text": "/:xx",
+      "displayText": "[敲打]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:30fd92f91a8937f8",
+      "kind": "builtin",
+      "label": "再见",
+      "text": "[Bye]",
+      "displayText": "[再见]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:b3d209fd3c3f5088",
+      "kind": "builtin",
+      "label": "擦汗",
+      "text": "/:wipe",
+      "displayText": "[擦汗]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:8c0917a4780ed689",
+      "kind": "builtin",
+      "label": "抠鼻",
+      "text": "/:dig",
+      "displayText": "[抠鼻]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:acde2cca621475e7",
+      "kind": "builtin",
+      "label": "鼓掌",
+      "text": "/:handclap",
+      "displayText": "[鼓掌]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:99eb21f341973ffb",
+      "kind": "builtin",
+      "label": "坏笑",
+      "text": "/:B-)",
+      "displayText": "[坏笑]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:564903608236a322",
+      "kind": "builtin",
+      "label": "右哼哼",
+      "text": "/:@>",
+      "displayText": "[右哼哼]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:db01e9c20a59d504",
+      "kind": "builtin",
+      "label": "鄙视",
+      "text": "/:>-|",
+      "displayText": "[鄙视]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:6686860d66f1caad",
+      "kind": "builtin",
+      "label": "委屈",
+      "text": "/:P-(",
+      "displayText": "[委屈]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:3e35b0e1a50eb9b1",
+      "kind": "builtin",
+      "label": "快哭了",
+      "text": "/::'|",
+      "displayText": "[快哭了]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:f5b6d94a26fc13b3",
+      "kind": "builtin",
+      "label": "阴险",
+      "text": "/:X-)",
+      "displayText": "[阴险]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:c5df79de4b1b5304",
+      "kind": "builtin",
+      "label": "亲亲",
+      "text": "/::*",
+      "displayText": "[亲亲]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:5b5264a73ec1a628",
+      "kind": "builtin",
+      "label": "可怜",
+      "text": "/:8*",
+      "displayText": "[可怜]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:f2f09f9091cbfb34",
+      "kind": "builtin",
+      "label": "笑脸",
+      "text": "[Happy]",
+      "displayText": "[笑脸]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:0a2b881a5d17b283",
+      "kind": "builtin",
+      "label": "生病",
+      "text": "[Sick]",
+      "displayText": "[生病]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:0ea7fbae2970d28c",
+      "kind": "builtin",
+      "label": "脸红",
+      "text": "[Flushed]",
+      "displayText": "[脸红]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:c3253ab05c4f85e4",
+      "kind": "builtin",
+      "label": "破涕为笑",
+      "text": "[Lol]",
+      "displayText": "[破涕为笑]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:0405e418321aeaba",
+      "kind": "builtin",
+      "label": "恐惧",
+      "text": "[Terror]",
+      "displayText": "[恐惧]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:23ffb6921f939aa3",
+      "kind": "builtin",
+      "label": "失望",
+      "text": "[LetDown]",
+      "displayText": "[失望]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:e2341742ffb9674c",
+      "kind": "builtin",
+      "label": "无语",
+      "text": "[Duh]",
+      "displayText": "[无语]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:6279a423c9b7d65d",
+      "kind": "builtin",
+      "label": "嘿哈",
+      "text": "[Hey]",
+      "displayText": "[嘿哈]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:d20c427a7077a03c",
+      "kind": "builtin",
+      "label": "捂脸",
+      "text": "[Facepalm]",
+      "displayText": "[捂脸]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:05d02d924e17e924",
+      "kind": "builtin",
+      "label": "奸笑",
+      "text": "[Smirk]",
+      "displayText": "[奸笑]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:6f5e2115adc05c12",
+      "kind": "builtin",
+      "label": "机智",
+      "text": "[Smart]",
+      "displayText": "[机智]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:03368fbe3fd16049",
+      "kind": "builtin",
+      "label": "皱眉",
+      "text": "[Concerned]",
+      "displayText": "[皱眉]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:3e10ef4153b73720",
+      "kind": "builtin",
+      "label": "耶",
+      "text": "[Yeah!]",
+      "displayText": "[耶]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:56ec480e91c10801",
+      "kind": "builtin",
+      "label": "吃瓜",
+      "text": "[Onlooker]",
+      "displayText": "[吃瓜]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:e148f36ff8f2a877",
+      "kind": "builtin",
+      "label": "加油",
+      "text": "[GoForIt]",
+      "displayText": "[加油]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:73dc02624ee6fe85",
+      "kind": "builtin",
+      "label": "汗",
+      "text": "[Sweats]",
+      "displayText": "[汗]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:cac46c1d948453cc",
+      "kind": "builtin",
+      "label": "天啊",
+      "text": "[OMG]",
+      "displayText": "[天啊]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:97bc88b44599aaa4",
+      "kind": "builtin",
+      "label": "Emm",
+      "text": "[Emm]",
+      "displayText": "[Emm]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:3b4e935cd23bf920",
+      "kind": "builtin",
+      "label": "社会社会",
+      "text": "[Respect]",
+      "displayText": "[社会社会]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:71a88bdc13707044",
+      "kind": "builtin",
+      "label": "旺柴",
+      "text": "[Doge]",
+      "displayText": "[旺柴]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:5a7269bc1cb5435f",
+      "kind": "builtin",
+      "label": "好的",
+      "text": "[NoProb]",
+      "displayText": "[好的]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:069cd06541fa3fec",
+      "kind": "builtin",
+      "label": "打脸",
+      "text": "[MyBad]",
+      "displayText": "[打脸]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:c37773876d5a467c",
+      "kind": "builtin",
+      "label": "哇",
+      "text": "[Wow]",
+      "displayText": "[哇]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:bfb13334639d69e0",
+      "kind": "builtin",
+      "label": "翻白眼",
+      "text": "[Boring]",
+      "displayText": "[翻白眼]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:b14e923491a2a7f1",
+      "kind": "builtin",
+      "label": "666",
+      "text": "[666]",
+      "displayText": "[666]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:943e508325afc082",
+      "kind": "builtin",
+      "label": "让我看看",
+      "text": "[LetMeSee]",
+      "displayText": "[让我看看]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:e5820b61e5e38ccb",
+      "kind": "builtin",
+      "label": "叹气",
+      "text": "[Sigh]",
+      "displayText": "[叹气]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:86ecff3cc2ed0f25",
+      "kind": "builtin",
+      "label": "苦涩",
+      "text": "[Hurt]",
+      "displayText": "[苦涩]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:cc08d049bd1e9266",
+      "kind": "builtin",
+      "label": "裂开",
+      "text": "[Broken]",
+      "displayText": "[裂开]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:f5a0409fa020c561",
+      "kind": "builtin",
+      "label": "嘴唇",
+      "text": "/:showlove",
+      "displayText": "[嘴唇]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:7256050163fdef11",
+      "kind": "builtin",
+      "label": "爱心",
+      "text": "/:heart",
+      "displayText": "[爱心]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:9e611bf980a1510c",
+      "kind": "builtin",
+      "label": "心碎",
+      "text": "/:break",
+      "displayText": "[心碎]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:255458ec874d5674",
+      "kind": "builtin",
+      "label": "拥抱",
+      "text": "/:hug",
+      "displayText": "[拥抱]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:e977169592eef3ef",
+      "kind": "builtin",
+      "label": "强",
+      "text": "/:strong",
+      "displayText": "[强]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:717babb47c9b1561",
+      "kind": "builtin",
+      "label": "弱",
+      "text": "/:weak",
+      "displayText": "[弱]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:5646d0e8d651e2df",
+      "kind": "builtin",
+      "label": "握手",
+      "text": "/:share",
+      "displayText": "[握手]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:3d8573439c775401",
+      "kind": "builtin",
+      "label": "胜利",
+      "text": "/:v",
+      "displayText": "[胜利]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:9f542dfe05cb199c",
+      "kind": "builtin",
+      "label": "抱拳",
+      "text": "[Salute]",
+      "displayText": "[抱拳]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:4e929375bb3c3d11",
+      "kind": "builtin",
+      "label": "勾引",
+      "text": "/:jj",
+      "displayText": "[勾引]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:51307451177dfa48",
+      "kind": "builtin",
+      "label": "拳头",
+      "text": "/:@@",
+      "displayText": "[拳头]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:591b586833922f75",
+      "kind": "builtin",
+      "label": "OK",
+      "text": "/:ok",
+      "displayText": "[OK]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:b71323fed57f583c",
+      "kind": "builtin",
+      "label": "合十",
+      "text": "[Worship]",
+      "displayText": "[合十]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:6ae9735dc067d588",
+      "kind": "builtin",
+      "label": "啤酒",
+      "text": "/:beer",
+      "displayText": "[啤酒]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:fcf0a1bf84fb9931",
+      "kind": "builtin",
+      "label": "咖啡",
+      "text": "/:coffee",
+      "displayText": "[咖啡]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:f8075a6b630d5f3a",
+      "kind": "builtin",
+      "label": "蛋糕",
+      "text": "/:cake",
+      "displayText": "[蛋糕]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:e6c9e06161b3070a",
+      "kind": "builtin",
+      "label": "玫瑰",
+      "text": "/:rose",
+      "displayText": "[玫瑰]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:416ca199c1250c1e",
+      "kind": "builtin",
+      "label": "凋谢",
+      "text": "/:fade",
+      "displayText": "[凋谢]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:425f10c4c05faa1f",
+      "kind": "builtin",
+      "label": "菜刀",
+      "text": "/:pd",
+      "displayText": "[菜刀]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:f122024c001e4b1e",
+      "kind": "builtin",
+      "label": "炸弹",
+      "text": "/:bome",
+      "displayText": "[炸弹]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:4b79b09919ab475e",
+      "kind": "builtin",
+      "label": "便便",
+      "text": "/:shit",
+      "displayText": "[便便]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:3b908c37223a7b84",
+      "kind": "builtin",
+      "label": "月亮",
+      "text": "/:moon",
+      "displayText": "[月亮]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:5c614233ed1f2255",
+      "kind": "builtin",
+      "label": "太阳",
+      "text": "/:sun",
+      "displayText": "[太阳]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:5c0a3d1c7096a66f",
+      "kind": "builtin",
+      "label": "庆祝",
+      "text": "[Party]",
+      "displayText": "[庆祝]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:222b1197d28efc0a",
+      "kind": "builtin",
+      "label": "礼物",
+      "text": "[gift]",
+      "displayText": "[礼物]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:8ab79c0013ac85f2",
+      "kind": "builtin",
+      "label": "红包",
+      "text": "[Packet]",
+      "displayText": "[红包]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:425781cf568ca0bc",
+      "kind": "builtin",
+      "label": "發",
+      "text": "[Rich]",
+      "displayText": "[發]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:4374385d0314e189",
+      "kind": "builtin",
+      "label": "福",
+      "text": "[Blessing]",
+      "displayText": "[福]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:cc4b01777923cdd4",
+      "kind": "builtin",
+      "label": "烟花",
+      "text": "[Fireworks]",
+      "displayText": "[烟花]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:4d35492af4c98ac2",
+      "kind": "builtin",
+      "label": "爆竹",
+      "text": "[Firecracker]",
+      "displayText": "[爆竹]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:7dd4bbc2df732184",
+      "kind": "builtin",
+      "label": "猪头",
+      "text": "/:pig",
+      "displayText": "[猪头]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:466c54b410e44e9f",
+      "kind": "builtin",
+      "label": "跳跳",
+      "text": "/:jump",
+      "displayText": "[跳跳]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:2843c3c2048824bf",
+      "kind": "builtin",
+      "label": "发抖",
+      "text": "/:shake",
+      "displayText": "[发抖]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    },
+    {
+      "stickerId": "builtin:1eea193c736de601",
+      "kind": "builtin",
+      "label": "转圈",
+      "text": "/:circle",
+      "displayText": "[转圈]",
+      "origin": "wechat_builtin",
+      "scenes": [
+        "casual",
+        "greeting",
+        "thanks",
+        "celebration"
+      ],
+      "reviewed": true,
+      "animated": false,
+      "renderedByWeChat": true
+    }
+  ],
+  "verification": {
+    "classicCodesAndLabels": "verified in client emoji-panel constants",
+    "modernCodesAndLabels": "verified against embedded newemoji-config.xml",
+    "modernResourceFileOffset": "0x875736b"
+  }
+}

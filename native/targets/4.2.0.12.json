@@ -1,0 +1,23 @@
+{
+  "clientVersion": "4.2.0.12",
+  "coreSha256": "2b3677c3f932daaa4ef84c8b2acd0aee12cbe5a779ff9e740c370761e5c291ce",
+  "constants": {
+    "CONSTRUCTOR_RVA": "0x78d5c0",
+    "CONTEXT_RVA": "0xf910",
+    "SEND_RVA": "0x1a13470",
+    "VECTOR_VTABLE": "0x93f5098",
+    "MESSAGE_CONTROL_VTABLE": "0x912d1a8",
+    "REQUEST_COUNTER": "0xb48cea0",
+    "TYPE_DESCRIPTOR": "0xb655bd0",
+    "IMAGE_CONSTRUCTOR_RVA": "0x1ac5d80",
+    "IMAGE_CONTROL_VTABLE": "0x93bd4a8",
+    "IMAGE_VTABLE": "0x93bd538"
+  },
+  "validation": {
+    "rttiAndFunctionLayout": "verified-statically",
+    "databaseRead": "verified-2026-10-31",
+    "nativePreparation": "pending-login",
+    "textSendServerRecord": "not-tested-on-this-client",
+    "stickerSendServerRecord": "not-tested-on-this-client"
+  }
+}

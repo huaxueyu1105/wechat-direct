@@ -1,0 +1,6 @@
+cryptography==50.0.2
+cffi==2.1.1
+pycparser==3.12
+pefile==2024.8.26
+zstandard==0.25.0
+Pillow==13.0.0

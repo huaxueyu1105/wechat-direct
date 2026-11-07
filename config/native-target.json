@@ -1,0 +1,26 @@
+{
+  "clientVersion": "4.2.0.13",
+  "corePath": "C:\\Program Files\\Tencent\\Weixin\\4.2.0.13\\Weixin.dll",
+  "coreSha256": "afe3d02c58bada3c35009c0cd58ee1f57b2a00fe53237d0dce649107fddb9a20",
+  "transport": "direct-only",
+  "accountMode": "existing-personal-account",
+  "uiAutomationAllowed": false,
+  "nativeRuntimeValidated": true,
+  "sendEnabled": true,
+  "status": "database-and-native-preparation-verified",
+  "runtimeValidatedParts": [
+    "bound-original-account",
+    "contact-and-message-read",
+    "text-native-preparation-no-submission",
+    "image-native-preparation-no-submission"
+  ],
+  "runtimeUnvalidatedParts": [
+    "new-client-text-server-record",
+    "new-client-sticker-server-record",
+    "batch-send-load-testing"
+  ],
+  "validationScope": "4.2.0.13 database reads and native text/image preparation passed; actual submission not tested",
+  "nativeBridgeFile": "native/direct-bridge-4.2.0.13.dll",
+  "testMessageSubmitted": false,
+  "testSendVerified": false
+}

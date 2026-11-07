@@ -1,0 +1,4 @@
+interface:
+  display_name: "微信直连"
+  short_description: "通过当前个人号直连收发文字，代拟回复按场景适度使用微信内置和已添加的单个表情，核对发出记录"
+  default_prompt: "使用 $wechat-desktop 读取我指定的微信聊天，按授权代拟自然回复，并在合适场景少量使用微信内置和已添加的单个表情。"

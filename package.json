@@ -1,0 +1,19 @@
+{
+  "name": "local-wechat-direct-adapter",
+  "version": "2.4.2",
+  "private": true,
+  "type": "module",
+  "description": "Personal-account direct WeChat 4.2.0.13 Codex plugin; native preflight before first submission",
+  "scripts": {
+    "test": "node --test",
+    "doctor": "node src/doctor.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/huaxueyu1105/wechat-direct.git"
+  }
+}

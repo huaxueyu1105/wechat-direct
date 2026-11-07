@@ -1,0 +1,27 @@
+{
+  "name": "wechat-desktop",
+  "version": "2.4.2",
+  "description": "本机微信原号直连：读取及轮询消息、按授权发送文字和内置/已添加的单个表情，按语境限频。",
+  "requires_local_executor": true,
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "微信直连",
+    "shortDescription": "原号直连收发消息，适度使用微信内置和已添加的单个表情",
+    "longDescription": "按用户截图选择微信内置表情和当前账号添加的单个表情。内置使用原有编码，单个表情读取原始图片或动图；适用场景每五条最多一次，严肃沟通不用。按账号保存配额、稳定操作编号和服务器记录核对，不主动后台回复。适配 Windows x64 微信 4.2.0.13。",
+    "developerName": "本地自定义",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "查看微信直连状态",
+      "读取指定联系人的最近聊天",
+      "按我的要求发一条微信消息"
+    ],
+    "brandColor": "#07C160",
+    "composerIcon": "./assets/wechat.png",
+    "logo": "./assets/wechat.png"
+  },
+  "skills": "./skills/"
+}

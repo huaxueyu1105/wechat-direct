@@ -1,0 +1,19 @@
+{
+  "builtinCatalogSha256": "77be9bc472d6438f61451367e99b0af849ddc960eb37858945e823f5dba40d5c",
+  "clientVersion": "4.2.0.13",
+  "coreSha256": "afe3d02c58bada3c35009c0cd58ee1f57b2a00fe53237d0dce649107fddb9a20",
+  "driverSha256": "5714b2f1a2262b78d067af61df8155cbb9c46eedce8cff7338a314a18a1447c5",
+  "stickerDriverSha256": "5714b2f1a2262b78d067af61df8155cbb9c46eedce8cff7338a314a18a1447c5",
+  "readerSha256": "072f5f362e4305d4897a762f2dd9c37e916acf527ccc3791c56e2153319c623c",
+  "platform": "windows-x64",
+  "python": "3.12-x64",
+  "maxSendOperationsPerClientProcess": 1024,
+  "nativeValidation": {
+    "rttiAndFunctionLayout": "verified-statically-2026-11-06",
+    "databaseRead": "verified-2026-11-06",
+    "nativePreparation": "verified-no-submission-text-and-image-2026-11-06",
+    "textSendServerRecord": "not-tested-on-this-client",
+    "stickerSendServerRecord": "not-tested-on-this-client"
+  },
+  "preflightBeforeFirstSubmission": true
+}
