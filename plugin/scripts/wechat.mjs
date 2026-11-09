@@ -19,6 +19,12 @@ export function pythonPath() {
   throw new Error('未找到 Python 3.12 x64。请配置 WECHAT_DIRECT_PYTHON，或使用本机 Codex 附带的 Python。');
 }
 export async function invoke(request) {
+  if (request.action === 'worker-status' || request.action === 'worker-stop') {
+    try {
+      const worker = await import('./scheduler.mjs');
+      return {ok:true,result:request.action==='worker-status'?worker.workerStatus():worker.requestWorkerStop()};
+    } catch (error) {return {ok:false,error:{code:error.code||'WORKER_CONTROL_ERROR',message:error.message}};}
+  }
   const encoded = JSON.stringify(request);
   if (Buffer.byteLength(encoded) > 128 * 1024) throw new Error('请求过大。');
   return new Promise((resolve, reject) => {
@@ -49,13 +55,15 @@ export async function invoke(request) {
 
 export function parseArgs(args) {
   const [action, ...rest] = args;
-  const allowed = new Set(['bind','status','probe','sticker-probe','contacts','sessions','messages','poll','send','send-reply','reply-policy','stickers','sticker-source','sticker-import','send-sticker','send-status']);
-  if (!allowed.has(action)) throw new Error('用法：wechat.mjs status|contacts|sessions|messages|poll|send|send-reply|reply-policy|stickers|sticker-source|sticker-import|send-sticker|send-status|bind|probe|sticker-probe');
+  const allowed = new Set(['bind','status','probe','sticker-probe','contacts','sessions','messages','poll','send','send-reply','send-image','send-file','reply-policy','stickers','sticker-source','sticker-import','send-sticker','send-status','send-close','schedule-create','schedule-list','schedule-update','schedule-run','worker-status','worker-stop','cache-status','cache-clean','cache-configure']);
+  if (!allowed.has(action)) throw new Error('不支持的操作；定时任务使用 schedule-create|schedule-list|schedule-update|schedule-run。');
   let request = {action};
   const fields = {'--query':'query','--recipient':'recipientId','--limit':'limit','--cursor':'cursor',
     '--timeout':'timeout','--wait':'wait','--operation-key':'operationKey','--scene':'scene',
     '--sticker-id':'stickerId','--file':'filePath','--label':'label','--mode':'mode',
-    '--category':'category','--offset':'offset','--refresh-favorites':'refreshFavorites','--favorite-offset':'favoriteOffset','--include-preview':'includePreview'};
+    '--category':'category','--offset':'offset','--refresh-favorites':'refreshFavorites','--favorite-offset':'favoriteOffset','--include-preview':'includePreview',
+    '--task-id':'taskId','--operation':'operation','--timezone':'timezone','--file-sha256':'fileSha256','--reviewed':'reviewed','--account':'account',
+    '--max-mib':'maxMiB','--max-age-days':'maxAgeDays','--purge':'purge','--include-keys':'includeKeys'};
   for (let i=0;i<rest.length;i+=2) {
     const flag=rest[i], value=rest[i+1];
     if (value === undefined) throw new Error('缺少参数值：'+flag);
@@ -65,10 +73,10 @@ export function parseArgs(args) {
     }
     if (!fields[flag]) throw new Error('未知参数：'+flag);
     const field=fields[flag];
-    if (['refreshFavorites','includePreview'].includes(field)) {
+    if (['refreshFavorites','includePreview','reviewed','purge','includeKeys'].includes(field)) {
       if (!['true','false'].includes(value)) throw new Error('布尔参数需为 true 或 false。');
       request[field]=value==='true';
-    } else request[field]=['limit','timeout','wait','offset','favoriteOffset'].includes(field)?Number(value):value;
+    } else request[field]=['limit','timeout','wait','offset','favoriteOffset','maxMiB','maxAgeDays'].includes(field)?Number(value):value;
   }
   return request;
 }

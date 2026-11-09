@@ -54,9 +54,9 @@ class NativePreparationTests(unittest.TestCase):
     def invoke(self,pid,core,sha,driver,may_send):
         raw=(self.folder/'bridge-request.bin').read_bytes()
         _,action,_,_,job=struct.unpack('<8sIII32s',raw[:52]);self.calls.append(action)
-        assert may_send==(action in (2,5))
-        report={'pid':123,'job':job.decode(),'stage':self.stage if action in (1,4) else 'submitted',
-                'exceptionCode':0,'nativeSubmissionReturned':action in (2,5)}
+        assert may_send==(action in (2,5,7,9))
+        report={'pid':123,'job':job.decode(),'stage':self.stage if action in (1,4,6,8) else 'submitted',
+                'exceptionCode':0,'nativeSubmissionReturned':action in (2,5,7,9)}
         (self.folder/'bridge-result.json').write_text(json.dumps(report),encoding='utf8')
     def call(self,action=2):return self.client.native('peer','body','a'*32,action)
     def test_failed_preparation_never_reaches_send(self):
@@ -73,6 +73,9 @@ class NativePreparationTests(unittest.TestCase):
     def test_sticker_has_separate_preparation(self):
         self.call();self.call(5)
         self.assertEqual(self.calls,[1,2,4,5])
+    def test_image_and_file_have_separate_preparation_and_cache(self):
+        self.call(7);self.call(9);self.call(7)
+        self.assertEqual(self.calls,[6,7,8,9,7])
 
 
 if __name__=='__main__':unittest.main()

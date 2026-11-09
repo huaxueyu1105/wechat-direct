@@ -1,10 +1,10 @@
 {
-  "builtinCatalogSha256": "77be9bc472d6438f61451367e99b0af849ddc960eb37858945e823f5dba40d5c",
+  "builtinCatalogSha256": "509bd0be81118e85f626123bbc48e57e93cc31ca41dc8aba24c97fc966ae582e",
   "clientVersion": "4.2.0.13",
   "coreSha256": "afe3d02c58bada3c35009c0cd58ee1f57b2a00fe53237d0dce649107fddb9a20",
-  "driverSha256": "5714b2f1a2262b78d067af61df8155cbb9c46eedce8cff7338a314a18a1447c5",
-  "stickerDriverSha256": "5714b2f1a2262b78d067af61df8155cbb9c46eedce8cff7338a314a18a1447c5",
-  "readerSha256": "072f5f362e4305d4897a762f2dd9c37e916acf527ccc3791c56e2153319c623c",
+  "driverSha256": "29052b7393e6d7bb5aa171e9ea9dbb7229ad5961f89fb14e0515135345bd900b",
+  "stickerDriverSha256": "29052b7393e6d7bb5aa171e9ea9dbb7229ad5961f89fb14e0515135345bd900b",
+  "readerSha256": "2464c399d0b9d467ae0bd7663c73e7a6f3164a073bc4d994897c5c5457e6875a",
   "platform": "windows-x64",
   "python": "3.12-x64",
   "maxSendOperationsPerClientProcess": 1024,
@@ -12,8 +12,16 @@
     "rttiAndFunctionLayout": "verified-statically-2026-11-06",
     "databaseRead": "verified-2026-11-06",
     "nativePreparation": "verified-no-submission-text-and-image-2026-11-06",
-    "textSendServerRecord": "not-tested-on-this-client",
-    "stickerSendServerRecord": "not-tested-on-this-client"
+    "textSendServerRecord": "verified-filehelper-single-message-2026-11-09",
+    "stickerSendServerRecord": "not-tested-on-this-client",
+    "imageAndFileLayout": "verified-statically-from-official-core-2026-11-09",
+    "imageAndFilePreparation": "verified-no-submission-2026-11-09",
+    "imageSendServerRecord": "verified-filehelper-single-png-2026-11-09",
+    "fileSendServerRecord": "verified-filehelper-single-txt-2026-11-09"
   },
-  "preflightBeforeFirstSubmission": true
+  "preflightBeforeFirstSubmission": true,
+  "mediaCapabilities": {
+    "image": true,
+    "file": true
+  }
 }

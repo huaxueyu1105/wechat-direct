@@ -46,7 +46,7 @@ from wechatauto.logger import wxlog
 
 PAGE_SZ = 4096
 RESERVE_SZ = 80  # IV(16) + HMAC(64)
-STAMP_VERSION = 3  # v3: stamp 内 mtime 改用 %r 完整精度（%f 只留 6 位小数，与 Windows 7 位小数比较恒不等→每秒重建缓存→磁盘 50MB/s 读+写）
+STAMP_VERSION = 4  # v4: committed/checksummed WAL snapshots; nanosecond timestamps and WAL generation.
 CONFIG_CIPHER_NAME = b"com.Tencent.WCDB.Config.Cipher"
 CONFIG_XOR_MASK = bytes.fromhex(
     "d2c7442458020000004889442450488b"
@@ -1356,127 +1356,100 @@ class WeChatDB:
         with self._build_lock_for(rel):
             return self._open_unlocked(rel)
 
-    def _open_unlocked(self, rel: str) -> sqlite3.Connection:
-        """打开解密(并合并 -wal 增量)后的只读库。
+    @staticmethod
+    def _snapshot_metadata(src: str, wal_path: str):
+        """Cache signature: times/sizes, WAL header, then main/WAL file identities."""
+        main = os.stat(src)
+        try:
+            with open(wal_path, "rb") as wal:
+                info = os.fstat(wal.fileno())
+                return (main.st_mtime_ns, main.st_size, info.st_mtime_ns, info.st_size,
+                        wal.read(32).hex(), main.st_dev, main.st_ino, info.st_dev, info.st_ino)
+        except FileNotFoundError:
+            return (main.st_mtime_ns, main.st_size, 0, 0, "", main.st_dev, main.st_ino, 0, 0)
 
-        解密结果缓存到 workdir；主库或 WAL 有变化时：
-        - 主库被 checkpoint 改写（mtime/size 变化）或 WAL 被重置 → 全量重建；
-        - 仅 WAL 追加了新帧 → 增量合并新帧（秒级）。
-        """
+    def _snapshot_identity(self, src: str, wal_path: str):
+        """Detect checkpoint/replacement while copying; WAL append is allowed."""
+        value = self._snapshot_metadata(src, wal_path)
+        return value[:2] + (value[4],) + value[5:]
+
+    def _open_unlocked(self, rel: str) -> sqlite3.Connection:
+        """Publish a verified snapshot only after its main/WAL generation is stable."""
         if rel not in self._keys:
             self._auto_diagnose_key_failure(rel)
-            raise RuntimeError(
-                "数据库无可用密钥: %s。请确认微信已登录且保持窗口打开。"
-                "常见原因：① 32 位 Python 读不了 64 位微信内存；"
-                "② 本脚本权限低于微信（微信以管理员运行时，脚本也要以管理员运行）；"
-                "③ 多账号机器选错账号（用 WeChatDB(account=\"当前登录账号\") 指定）。"
-                "仍复现请运行 python -m wechatauto.diagnose_keys 并把完整输出发给维护者。"
-                "也可删除密钥缓存强制重新提取后重试: %s"
-                % (rel, self.keys_file)
-            )
+            raise RuntimeError("数据库无可用密钥，请确认已登录所绑定账号。")
         src = self._db_path(rel)
         dst = os.path.join(self.workdir, rel.replace(os.sep, "__"))
         key = self._keys[rel]
         if len(key) == 48:
-            # 兼容历史上误存的形式：48 字节 = key+salt，仅适用于「明文头」库；
-            # 标准 SQLCipher 库若存成 48 字节，解密会保留文件头 16 字节、从
-            # offset 16 开始解 → 产出非 SQLite 文件（file is not a database）。
-            # 用页1 校验判定：文件头 salt 能验过 → 标准形式，截回 32 字节。
-            try:
-                with open(src, "rb") as _f:
-                    _p1 = _f.read(PAGE_SZ)
-                if _verify_enc_key(key[:32], _p1):
+            with open(src, "rb") as stream:
+                if _verify_enc_key(key[:32], stream.read(PAGE_SZ)):
                     key = key[:32]
-            except OSError:
-                pass
-        src_mtime = os.path.getmtime(src)
-        src_size = os.path.getsize(src)
-        wal_path = self._wal_path(rel)
-        wal_mtime = os.path.getmtime(wal_path) if wal_path else 0.0
-        wal_size = os.path.getsize(wal_path) if wal_path else 0
+        wal_path = src + "-wal"
         stamp = dst + ".stamp"
+
         old = None
-        if os.path.exists(stamp):
+        try:
+            with open(stamp, "r", encoding="ascii") as stream:
+                parts = stream.read().split(",")
+            if len(parts) == 11 and int(parts[0]) == STAMP_VERSION:
+                old = tuple(map(int, parts[1:5])) + (parts[6],) + tuple(map(int, parts[7:11]))
+        except (OSError, ValueError):
+            pass
+        initial = self._snapshot_metadata(src, wal_path)
+        if old != initial or not os.path.isfile(dst):
+            tmp = "%s.%d.%x.tmp" % (dst, os.getpid(), threading.get_ident())
+            merged = tmp + ".wal"
+            os.makedirs(os.path.dirname(dst), exist_ok=True)
+            published = False
             try:
-                with open(stamp, "r") as f:
-                    parts = f.read().split(",")
-                old = {
-                    "ver": int(parts[0]),
-                    "mtime": float(parts[1]),
-                    "size": int(parts[2]),
-                    "wal_mtime": float(parts[3]),
-                    "wal_size": int(parts[4]),
-                    "applied": int(parts[5]),
-                }
-                if old["ver"] != STAMP_VERSION:
-                    old = None
-            except (ValueError, OSError, IndexError):
-                old = None
-        build = (not old or old["mtime"] != src_mtime or old["size"] != src_size
-                 or old["wal_mtime"] != wal_mtime or old["wal_size"] != wal_size)
-        # 构建策略：**先做主库自洽快照当底线，再尝试合并 WAL**。
-        # 主库在上次 checkpoint 时是自洽的（SQLite 保证），所以「仅解密主库」
-        # 一定可读，代价是可能缺最近少量消息；WAL 合并成功则用更新的那份。
-        # 关键：任何中间产物都写在 tmp，**成功才原子替换** dst，失败不会毁掉
-        # 上一份已验证副本。
-        # 中间产物按「进程 + 线程」唯一命名：固定名 dst+".tmp" 会被并发打开同一份
-        # 库的另一个线程用 os.replace 掉，这边就 FileNotFoundError（监听所有会话、
-        # 几百个会话同时开库时必现）。唯一命名后异常退出会留下残留文件，故构建前
-        # 顺手清掉 10 分钟前的陈旧中间产物。
-        tmp = "%s.%d.%x.tmp" % (dst, os.getpid(), threading.get_ident())
-        applied = 0
-        if build:
-            for stale in glob.glob(dst + ".*.tmp*"):
-                try:
-                    if time.time() - os.path.getmtime(stale) > 600:
-                        os.remove(stale)
-                except OSError:
-                    pass
-            # 微信 checkpoint 会**就地改写主库页**：单次读取可能读到“撕裂”状态
-            # （页头与内容来自不同时刻）→ quick_check 会失败。故解密后必须校验，
-            # 失败就重读（每次重读都是一次新的快照）。
-            best = None
-            for attempt in range(1, 5):
-                self._decrypt_file(src, tmp, key)
-                if self._check_merged(tmp):
-                    best = tmp
-                    break
-                wxlog.debug('主库解密快照校验失败（第 %d/4 次）: %s' % (attempt, rel))
-                time.sleep(0.35)
-            if best is None:
-                if os.path.exists(dst) and self._check_merged(dst):
-                    wxlog.warning('主库持续处于撕裂状态，改用上一份可用副本（可能略旧）: %s'
-                                  % rel)
-                    build = False
-                else:
-                    raise RuntimeError("数据库解密结果校验失败(微信正在 checkpoint): %s" % rel)
-            if build:
-                best_applied = 0
-                if wal_path and wal_size > self.WAL_HEADER_SZ:
-                    merged = tmp + ".wal"
-                    ok_wal = False
-                    for attempt in (1, 3):
-                        try:
-                            shutil.copyfile(best, merged)
-                            got = self._merge_wal(merged, wal_path, key, 0)
-                            if self._check_merged(merged):
-                                os.replace(merged, best)
-                                best_applied, ok_wal = got, True
-                                break
-                        except Exception as exc:
-                            wxlog.debug('WAL 合并第 %d 次失败：%r' % (attempt, exc))
-                        time.sleep(0.3)
-                    if not ok_wal:
-                        best_applied = -1          # 标记：本轮未合并 WAL
-                        wxlog.warning('WAL 合并失败（微信持续写入），改用仅主库快照'
-                                      '（可能缺少最近消息）: %s' % rel)
-                os.replace(best, dst)
-                applied = best_applied
-                os.makedirs(os.path.dirname(stamp), exist_ok=True)
-                with open(stamp, "w") as f:
-                    f.write("%d,%r,%d,%r,%d,%d"
-                            % (STAMP_VERSION, src_mtime, src_size, wal_mtime, wal_size, applied))
-            build = False
+                for attempt in range(4):
+                    try:
+                        before = self._snapshot_identity(src, wal_path)
+                        captured = self._snapshot_metadata(src, wal_path)
+                        self._decrypt_file(src, tmp, key)
+                        if not self._check_merged(tmp):
+                            raise RuntimeError("主库快照校验失败")
+                        applied = 0
+                        if captured[3] > self.WAL_HEADER_SZ:
+                            shutil.copyfile(tmp, merged)
+                            try:
+                                applied = self._merge_wal(merged, wal_path, key, 0)
+                                if not self._check_merged(merged):
+                                    raise RuntimeError("WAL 快照校验失败")
+                            except (OSError, ValueError, RuntimeError) as error:
+                                # A stable main file remains a committed checkpoint.
+                                # The failed WAL image must never replace that baseline.
+                                applied = -1
+                                wxlog.warning('WAL 合并失败，保留主库快照: %s', type(error).__name__)
+                            else:
+                                os.replace(merged, tmp)
+                        if before != self._snapshot_identity(src, wal_path):
+                            raise RuntimeError("读取期间发生 checkpoint 或 WAL 世代切换")
+                        os.replace(tmp, dst)
+                        # Record the metadata from BEFORE capture: appends during the
+                        # copy cause a fresh check next time rather than a false cache hit.
+                        with open(stamp, "w", encoding="ascii") as stream:
+                            stream.write(",".join(map(str, (STAMP_VERSION, *captured[:4], applied,
+                                                            captured[4], *captured[5:]))))
+                        published = True
+                        break
+                    except (OSError, ValueError, RuntimeError) as error:
+                        wxlog.debug('数据库快照第 %d/4 次失败: %s', attempt + 1, type(error).__name__)
+                        if attempt < 3:
+                            time.sleep(0.1)
+                if not published:
+                    # Never reuse a pre-v4 cache that may contain uncommitted pages.
+                    if (old is None or old[5:] != self._snapshot_metadata(src, wal_path)[5:]
+                            or not os.path.isfile(dst) or not self._check_merged(dst)):
+                        raise RuntimeError("数据库正在变化，未取得一致快照，请稍后重试。")
+                    wxlog.warning('暂用上一份已验证的数据库快照: %s', rel)
+            finally:
+                for temporary in (tmp, merged):
+                    try:
+                        os.remove(temporary)
+                    except FileNotFoundError:
+                        pass
         conn = sqlite3.connect(f"file:{dst}?mode=ro", uri=True)
         conn.row_factory = sqlite3.Row
         conn.text_factory = _sqlite_text_factory
@@ -1505,66 +1478,87 @@ class WeChatDB:
         wal = self._db_path(rel) + "-wal"
         return wal if os.path.exists(wal) else None
 
+    @staticmethod
+    def _wal_checksum(data: bytes, seed, byte_order: str):
+        first, second = seed
+        for left, right in struct.iter_unpack(byte_order + "II", data):
+            first = (first + left + second) & 0xffffffff
+            second = (second + right + first) & 0xffffffff
+        return first, second
+
     def _merge_wal(self, dst: str, wal_path: str, key: bytes, from_frame: int) -> int:
-        """把 -wal 中的加密帧按页号覆盖进已解密的主库文件，返回已应用帧数。
+        """Apply the last valid committed WAL prefix, never an uncommitted tail.
 
-        帧结构（WCDB，全部大端）：[0:4] 页号, [4:8] 提交标记, [8:16] salt, [16:24] 校验。
-        帧内页面与主库页相同加密格式，直接用库密钥解密。
-        页 1 帧用页 1 专用布局（数据区 [16:4016]，IV 在 [4016:4032]）解密。
-
-        只合并 salt 与当前 WAL 头一致的帧：微信 checkpoint 会重置 WAL（salt+1 并
-        清零写游标），旧世代帧若被合并会用过期页覆盖新数据，造成库损坏。
+        SQLCipher computes WAL checksums over the encoded (encrypted) page.
+        Validated frames are spooled privately so a checkpoint cannot change
+        pages between validation and application and large WALs do not fill RAM.
         """
         if not os.path.exists(dst):
             return 0
-        out = open(dst, "r+b")
-        try:
-            db_pages = (os.path.getsize(dst) + 4095) // PAGE_SZ
-            max_pgno = 0
-            last = from_frame
-            with open(wal_path, "rb") as wal:
-                wal_hdr = wal.read(self.WAL_HEADER_SZ)
-                wal_salt = wal_hdr[16:24]
-                wal_size = os.path.getsize(wal_path)
-                n = (wal_size - self.WAL_HEADER_SZ) // self.WAL_FRAME_SZ
-                for i in range(from_frame, n):
-                    wal.seek(self.WAL_HEADER_SZ + i * self.WAL_FRAME_SZ)
-                    hdr = wal.read(24)
-                    page = wal.read(PAGE_SZ)
-                    if len(page) < PAGE_SZ:
+        if not isinstance(from_frame, int) or from_frame < 0:
+            raise ValueError("Invalid WAL starting frame")
+        with open(wal_path, "rb") as wal, tempfile.TemporaryFile(
+                mode="w+b", prefix=".wal-frames-", dir=os.path.dirname(os.path.abspath(dst))) as frames:
+            wal_info = os.fstat(wal.fileno())
+            header = wal.read(self.WAL_HEADER_SZ)
+            if len(header) != self.WAL_HEADER_SZ:
+                raise ValueError("Incomplete WAL header")
+            magic, version, page_size = struct.unpack(">III", header[:12])
+            if magic not in (0x377f0682, 0x377f0683) or version != 3007000 or page_size != PAGE_SZ:
+                raise ValueError("Unsupported WAL header")
+            byte_order = ">" if magic & 1 else "<"
+            checksum = self._wal_checksum(header[:24], (0, 0), byte_order)
+            if checksum != struct.unpack(">II", header[24:32]):
+                raise ValueError("Invalid WAL header checksum")
+            last_commit = db_pages = 0
+            starts_at_commit = from_frame == 0
+            count = max(0, (wal_info.st_size - self.WAL_HEADER_SZ) // self.WAL_FRAME_SZ)
+            for index in range(count):
+                frame = wal.read(self.WAL_FRAME_SZ)
+                if len(frame) != self.WAL_FRAME_SZ:
+                    break
+                pgno, committed_size = struct.unpack(">II", frame[:8])
+                if not 0 < pgno <= 0xfffffffe or frame[8:16] != header[16:24]:
+                    break
+                checksum = self._wal_checksum(frame[:8] + frame[24:], checksum, byte_order)
+                if checksum != struct.unpack(">II", frame[16:24]):
+                    break
+                frames.write(frame)
+                if committed_size:
+                    if committed_size > 0xfffffffe or pgno > committed_size:
                         break
-                    pgno = struct.unpack(">I", hdr[:4])[0]
-                    last = i + 1
-                    if hdr[8:16] != wal_salt:
-                        continue
-                    pt = _decrypt_page(key, page, pgno)
-                    if pgno == 1:
-                        # 明文头模式（48B key）页 1 解密后保留明文头，
-                        # 头部 magic 可能不是标准 SQLite；用版本字节兜底校验。
-                        if len(key) == 48:
-                            if len(pt) < PAGE_SZ or pt[16:18] != b"\x01\x01":
-                                continue
-                        elif pt[:16] != b"SQLite format 3\x00":
-                            continue
-                    elif pt[0] not in (0, 2, 5, 10, 13):
-                        continue
+                    last_commit, db_pages = index + 1, committed_size
+                    if from_frame == last_commit:
+                        starts_at_commit = True
+            # A WAL reset/replacement invalidates this capture, even if the old
+            # open handle still refers to a perfectly valid previous generation.
+            with open(wal_path, "rb") as current_wal:
+                current = os.fstat(current_wal.fileno())
+                current_header = current_wal.read(self.WAL_HEADER_SZ)
+            if (current_header != header or
+                    (current.st_dev, current.st_ino) != (wal_info.st_dev, wal_info.st_ino)):
+                raise RuntimeError("WAL changed during capture")
+            if not starts_at_commit or from_frame > last_commit:
+                raise ValueError("WAL starting frame is not a captured commit boundary")
+            if last_commit == from_frame:
+                return last_commit
+            frames.seek(from_frame * self.WAL_FRAME_SZ)
+            with open(dst, "r+b") as out:
+                for _ in range(from_frame, last_commit):
+                    frame = frames.read(self.WAL_FRAME_SZ)
+                    pgno = struct.unpack(">I", frame[:4])[0]
+                    if pgno > db_pages:
+                        continue  # A later committed transaction shrank the DB.
+                    page = _decrypt_page(key, frame[24:], pgno)
+                    if len(page) != PAGE_SZ or (pgno == 1 and page[:16] != b"SQLite format 3\0"):
+                        raise ValueError("Invalid decrypted WAL page")
+                    # Overflow and freelist pages need not start with a b-tree tag.
                     out.seek((pgno - 1) * PAGE_SZ)
-                    out.write(pt)
-                    max_pgno = max(max_pgno, pgno)
-            out.flush()
-            db_pages = (os.path.getsize(dst) + 4095) // PAGE_SZ
-            out.seek(0)
-            page1 = out.read(PAGE_SZ)
-            hdr_pages = struct.unpack(">I", page1[28:32])[0]
-            new_pages = max(hdr_pages, max_pgno, db_pages)
-            if new_pages != hdr_pages:
-                page1 = page1[:28] + struct.pack(">I", new_pages) + page1[32:]
-                out.seek(0)
-                out.write(page1)
-            out.flush()
-        finally:
-            out.close()
-        return last
+                    out.write(page)
+                out.truncate(db_pages * PAGE_SZ)
+                out.seek(28)
+                out.write(struct.pack(">I", db_pages))
+            return last_commit
 
     def _decrypt_file(self, src: str, dst: str, key: bytes) -> None:
         size = os.path.getsize(src)
@@ -1670,8 +1664,56 @@ class WeChatDB:
         拿到完整消息序列。
         """
         conns = []
+        target = "Msg_" + _md5_hex(user.encode())
+        index_path = self.workdir + ".tables.json"
         try:
-            conns = [self._open(rel) for rel in self._message_dbs()]
+            with open(index_path, "r", encoding="utf8") as stream:
+                saved = json.loads(stream.read(2 * 1024 * 1024 + 1))
+            index = saved["shards"] if saved.get("version") == 1 and isinstance(saved.get("shards"), dict) else {}
+        except (OSError, ValueError, TypeError, AttributeError):
+            index = {}
+        try:
+            rels = self._message_dbs()
+            index = {rel: entry for rel, entry in index.items() if rel in rels}
+            for rel in rels:
+                src = self._db_path(rel)
+                signature = list(self._snapshot_metadata(src, src + "-wal"))
+                previous = index.get(rel)
+                if (isinstance(previous, dict) and previous.get("signature") == signature
+                        and isinstance(previous.get("tables"), list)
+                        and all(isinstance(name, str) and re.fullmatch(r"Msg_[0-9a-f]{32}", name)
+                                for name in previous["tables"])
+                        and target not in previous["tables"]):
+                    continue
+                conn = self._open(rel)
+                conns.append(conn)
+                tables = [row[0] for row in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")
+                          if re.fullmatch(r"Msg_[0-9a-f]{32}", row[0])]
+                # Never cache a negative result from an older fallback snapshot.
+                fresh = False
+                try:
+                    stamp = os.path.join(self.workdir, rel.replace(os.sep, "__")) + ".stamp"
+                    with open(stamp, "r", encoding="ascii") as stream:
+                        parts = stream.read().split(",")
+                    captured = list(map(int, parts[1:5])) + [parts[6]] + list(map(int, parts[7:11]))
+                    fresh = (len(parts) == 11 and int(parts[0]) == STAMP_VERSION and int(parts[5]) >= 0
+                             and captured == signature == list(self._snapshot_metadata(src, src + "-wal")))
+                except (OSError, ValueError, IndexError):
+                    pass
+                if fresh:index[rel] = {"signature": signature, "tables": tables}
+                else:index.pop(rel, None)
+                if target not in tables:
+                    conn.close();conns.remove(conn)
+                    if hasattr(self, "_trim_read_cache"):
+                        self._trim_read_cache([self._shard_label(opened) for opened in conns])
+            try:
+                os.makedirs(os.path.dirname(index_path), exist_ok=True)
+                temporary = index_path + ".tmp"
+                with open(temporary, "w", encoding="utf8") as stream:
+                    json.dump({"version": 1, "shards": index}, stream)
+                os.replace(temporary, index_path)
+            except OSError:
+                pass
             found = self._find_msg_tables(user, conns)
         except sqlite3.DatabaseError as exc:
             for c in conns:

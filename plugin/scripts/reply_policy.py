@@ -42,7 +42,7 @@ def decision(scene, history):
     used = sum(has_expression(x) for x in recent)
     allowed = scene in ELIGIBLE_SCENES
     reason = 'eligible' if allowed else 'context_not_suitable'
-    if allowed and any(has_expression(x) for x in recent[:SPACING - 1]):
+    if allowed and any(has_expression(x) or x.get('kind') in ('image','file') for x in recent[:SPACING - 1]):
         allowed, reason = False, 'spacing_limit'
     if allowed and (used + 1) * SPACING > len(recent) + 1:
         allowed, reason = False, 'ratio_limit'

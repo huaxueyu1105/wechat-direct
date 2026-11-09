@@ -12,7 +12,7 @@ test('MCP exposes the versioned reply tools with correct read and write annotati
   assert.equal(child.status,0,child.stderr);
   const [initialized,listed]=child.stdout.trim().split(/\r?\n/).map(JSON.parse);
   assert.equal(initialized.result.serverInfo.version,version);
-  assert.equal(listed.result.tools.length,13);
+  assert.equal(listed.result.tools.length,25);
   const tools=Object.fromEntries(listed.result.tools.map(x=>[x.name,x]));
   assert.equal(tools.wechat_stickers.annotations.openWorldHint,true);
   assert.equal(tools.wechat_sticker_source.annotations.readOnlyHint,true);
@@ -21,11 +21,21 @@ test('MCP exposes the versioned reply tools with correct read and write annotati
   assert.equal(tools.wechat_sticker_import.inputSchema.properties.filePath,undefined);
   assert.ok(initialized.result.instructions.includes('添加的单个表情'));
   assert.equal(tools.wechat_reply_policy.annotations.readOnlyHint,true);
-  for (const name of ['wechat_send_text','wechat_send_reply','wechat_send_sticker']) {
+  for (const name of ['wechat_send_text','wechat_send_reply','wechat_send_sticker','wechat_send_image','wechat_send_file']) {
     assert.equal(tools[name].annotations.readOnlyHint,false);
     assert.equal(tools[name].annotations.openWorldHint,true);
     assert.ok(tools[name].inputSchema.required.includes('operationKey'));
   }
   assert.ok(tools.wechat_send_reply.inputSchema.required.includes('scene'));
   assert.ok(tools.wechat_send_reply.inputSchema.properties.scene.enum.includes('serious'));
+  assert.equal(tools.wechat_schedules.annotations.readOnlyHint,true);
+  for(const name of ['wechat_cache_status','wechat_worker_status'])assert.equal(tools[name].annotations.readOnlyHint,true);
+  for(const name of ['wechat_bind','wechat_send_close','wechat_cache_clean','wechat_cache_configure','wechat_worker_stop'])assert.equal(tools[name].annotations.readOnlyHint,false);
+  assert.equal(tools.wechat_cache_clean.annotations.destructiveHint,true);
+  assert.ok(tools.wechat_send_close.inputSchema.required.includes('reviewed'));
+  for (const name of ['wechat_schedule_create','wechat_schedule_update']) {
+    assert.equal(tools[name].annotations.readOnlyHint,false);
+    assert.equal(tools[name].annotations.openWorldHint,true);
+    assert.ok(tools[name].inputSchema.required.includes('taskId'));
+  }
 });

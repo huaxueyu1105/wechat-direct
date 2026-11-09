@@ -27,7 +27,8 @@ support={'builtinCatalogSha256':hashlib.sha256((SOURCE/'runtime/builtin-expressi
     'stickerDriverSha256':hashlib.sha256((SOURCE/'runtime/native/direct-bridge-v3.dll').read_bytes()).hexdigest(),
     'readerSha256':hashlib.sha256((SOURCE/'runtime/vendor/wechat_db.py').read_bytes()).hexdigest(),
     'platform':'windows-x64','python':'3.12-x64','maxSendOperationsPerClientProcess':1024,
-    'nativeValidation':profile['validation'],'preflightBeforeFirstSubmission':True}
+    'nativeValidation':profile['validation'],'preflightBeforeFirstSubmission':True,
+    'mediaCapabilities':profile.get('mediaCapabilities',{'image':False,'file':False})}
 (SOURCE/'runtime/support.json').write_text(json.dumps(support,indent=2)+'\n',encoding='utf8')
 if args.prepare_only:
     print(json.dumps({'clientVersion':support['clientVersion'],'supportPrepared':True}));raise SystemExit(0)
@@ -55,7 +56,7 @@ shutil.copyfile(ROOT/'LICENSE',bundle/'LICENSE')
 shutil.copyfile(ROOT/'THIRD_PARTY_NOTICES.md',bundle/'THIRD_PARTY_NOTICES.md')
 native_sources=plugin/'runtime/native/source'
 native_sources.mkdir(parents=True,exist_ok=True)
-for name in ('direct_bridge.c','bridge_target.h'):
+for name in ('direct_bridge.c','bridge_target.h','media_validation.h'):
     shutil.copyfile(ROOT/'native'/name,native_sources/name)
 shutil.copyfile(ROOT/'native/targets'/(profile['clientVersion']+'.json'),native_sources/('target-'+profile['clientVersion']+'.json'))
 market={'name':'local-wechat-direct','interface':{'displayName':'微信原号直连'},'plugins':[{

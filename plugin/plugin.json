@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "wechat-desktop",
-  "version": "2.4.2",
-  "description": "本机微信原号直连：读取及轮询消息、按授权发送文字和内置/已添加的单个表情，按语境限频。",
+  "version": "2.5.0-dev.2",
+  "description": "本机微信原号直连：读取聊天，按授权发送文字、表情、普通图片和文件，支持本地定时任务、账号选择、状态恢复与缓存管理。",
   "keywords": [
     "wechat",
     "weixin",

@@ -5,6 +5,7 @@
 #include <string.h>
 #include <wchar.h>
 #include "bridge_target.h"
+#include "media_validation.h"
 
 static HMODULE own_module;
 static volatile LONG busy, callback_count;
@@ -87,7 +88,10 @@ __declspec(dllexport) DWORD WINAPI ExecuteJob(void *unused) {
     const char *stage="invalid_request"; DWORD exception=0; BOOL submitted=FALSE; uint64_t request_id=0;
     char result[1800], job[33]={0}, uuid[80]={0};
     unsigned char *payload=NULL, *block=NULL, *context=NULL;
-    BOOL sticker=FALSE, will_send=FALSE; wchar_t media_path[16384]; int path_length=0; uint64_t file_size=0;
+    int media_kind=BRIDGE_MEDIA_NONE; BOOL will_send=FALSE;
+    wchar_t media_path[16384]; int path_length=0; uint64_t file_size=0;
+    uintptr_t constructor_rva=BRIDGE_CONSTRUCTOR_RVA, control_vtable=BRIDGE_MESSAGE_CONTROL_VTABLE, object_vtable=0;
+    const char *filename=NULL; size_t filename_length=0;
     Request request={0}; wchar_t path[32768]; DWORD bytes=0;
     if (!local_path(path,L"bridge-request.bin")) goto finish;
     HANDLE input=CreateFileW(path,GENERIC_READ,FILE_SHARE_READ,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
@@ -116,25 +120,48 @@ __declspec(dllexport) DWORD WINAPI ExecuteJob(void *unused) {
         if (last_object&&strcmp(last_job,job)==0) get_uuid(last_object,uuid);
         goto finish;
     }
-    sticker=request.action==4||request.action==5;
-    will_send=request.action==2||request.action==5;
-    if (request.action!=1&&request.action!=2&&!sticker) {stage="invalid_action";goto finish;}
-    if (sticker) {
-        stage="sticker_core_validation_failed";
+    media_kind=bridge_media_kind(request.action);
+    will_send=request.action==2||request.action==5||request.action==7||request.action==9;
+    if (request.action!=1&&request.action!=2&&!media_kind) {stage="invalid_action";goto finish;}
+    if (media_kind==BRIDGE_MEDIA_IMAGE&&!BRIDGE_HAS_IMAGE) {stage="image_unsupported_on_target";goto finish;}
+    if (media_kind==BRIDGE_MEDIA_FILE) {
+#if BRIDGE_HAS_FILE
+        stage="file_core_validation_failed";
+        if (memcmp(core+BRIDGE_FILE_CONSTRUCTOR_RVA,BRIDGE_FILE_CONSTRUCTOR_PREFIX,sizeof(BRIDGE_FILE_CONSTRUCTOR_PREFIX))) goto finish;
+        constructor_rva=BRIDGE_FILE_CONSTRUCTOR_RVA;
+        control_vtable=BRIDGE_FILE_CONTROL_VTABLE;object_vtable=BRIDGE_FILE_VTABLE;
+#else
+        stage="file_unsupported_on_target";goto finish;
+#endif
+    } else if (media_kind) {
+        stage="image_core_validation_failed";
         if (memcmp(core+BRIDGE_IMAGE_CONSTRUCTOR_RVA,BRIDGE_IMAGE_CONSTRUCTOR_PREFIX,sizeof(BRIDGE_IMAGE_CONSTRUCTOR_PREFIX))) goto finish;
+        constructor_rva=BRIDGE_IMAGE_CONSTRUCTOR_RVA;
+        control_vtable=BRIDGE_IMAGE_CONTROL_VTABLE;object_vtable=BRIDGE_IMAGE_VTABLE;
+    }
+    if (media_kind) {
         const char *raw=(char *)payload+sizeof(Request)+request.recipient_length;
         path_length=MultiByteToWideChar(CP_UTF8,MB_ERR_INVALID_CHARS,raw,(int)request.text_length,media_path,16383);
-        if (!path_length) {stage="invalid_sticker_path";goto finish;}
+        stage="invalid_media_path";
+        if (path_length<3) goto finish;
         media_path[path_length]=0;
-        for (int i=0;i<path_length;i++) if (!media_path[i]) {stage="invalid_sticker_path";goto finish;}
+        for (int i=0;i<path_length;i++) if (!media_path[i]) goto finish;
+        if (!((media_path[0]>=L'A'&&media_path[0]<=L'Z')||(media_path[0]>=L'a'&&media_path[0]<=L'z'))||
+            media_path[1]!=L':'||(media_path[2]!=L'\\'&&media_path[2]!=L'/')) goto finish;
         HANDLE media=CreateFileW(media_path,GENERIC_READ,FILE_SHARE_READ,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
-        if (media==INVALID_HANDLE_VALUE) {stage="sticker_file_unavailable";goto finish;}
-        LARGE_INTEGER length; unsigned char header[6]; DWORD read=0;
-        BOOL valid=GetFileSizeEx(media,&length)&&length.QuadPart>0&&length.QuadPart<=10*1024*1024&&
-            ReadFile(media,header,6,&read,NULL)&&read==6&&(!memcmp(header,"GIF87a",6)||!memcmp(header,"GIF89a",6));
+        if (media==INVALID_HANDLE_VALUE) {stage="media_file_unavailable";goto finish;}
+        LARGE_INTEGER length; unsigned char header[8]; DWORD read=0;
+        BOOL valid=GetFileSizeEx(media,&length)&&length.QuadPart>0&&
+            ReadFile(media,header,sizeof(header),&read,NULL)&&bridge_media_valid(media_kind,(uint64_t)length.QuadPart,header,read);
         CloseHandle(media);
-        if (!valid) {stage="invalid_sticker_file";goto finish;}
+        if (!valid) {stage="invalid_media_file";goto finish;}
         file_size=(uint64_t)length.QuadPart;
+        if (media_kind==BRIDGE_MEDIA_FILE) {
+            filename=raw;
+            for (uint32_t i=0;i<request.text_length;i++) if (raw[i]=='\\'||raw[i]=='/') filename=raw+i+1;
+            filename_length=request.text_length-(size_t)(filename-raw);
+            if (!filename_length) {stage="invalid_media_path";goto finish;}
+        }
     }
     block=allocate(32768);context=allocate(512);
     if (!block||!context) {stage="allocation_failed";goto finish;}
@@ -143,20 +170,21 @@ __declspec(dllexport) DWORD WINAPI ExecuteJob(void *unused) {
         typedef void *(__fastcall *Constructor)(void *);
         typedef void (__fastcall *ContextConstructor)(void *,void *,void *,void *,void *,uint64_t);
         typedef void (__fastcall *Send)(void *,void *);
-        *(uintptr_t *)block=(uintptr_t)(core+(sticker?BRIDGE_IMAGE_CONTROL_VTABLE:BRIDGE_MESSAGE_CONTROL_VTABLE));
+        *(uintptr_t *)block=(uintptr_t)(core+control_vtable);
         *(uint64_t *)(block+8)=0x200000005ull;
         unsigned char *object=block+16;
-        ((Constructor)(core+(sticker?BRIDGE_IMAGE_CONSTRUCTOR_RVA:BRIDGE_CONSTRUCTOR_RVA)))(object);
-        if (sticker && *(uintptr_t *)object!=(uintptr_t)(core+BRIDGE_IMAGE_VTABLE)) {
-            stage="sticker_object_type_mismatch";goto guarded_done;
+        ((Constructor)(core+constructor_rva))(object);
+        if (object_vtable&&*(uintptr_t *)object!=(uintptr_t)(core+object_vtable)) {
+            stage="media_object_type_mismatch";goto guarded_done;
         }
         if (!set_string(object+0xb0,(char *)payload+sizeof(Request),request.recipient_length)||
-            !(sticker?set_wstring(object+0x120,media_path,(size_t)path_length):
-                set_string(object+0x758,(char *)payload+sizeof(Request)+request.recipient_length,request.text_length))) {
+            !(media_kind?set_wstring(object+0x120,media_path,(size_t)path_length):
+                set_string(object+0x758,(char *)payload+sizeof(Request)+request.recipient_length,request.text_length))||
+            (media_kind==BRIDGE_MEDIA_FILE&&!set_string(object+0x1a8,filename,filename_length))) {
             stage="string_allocation_failed"; goto guarded_done;
         }
-        *(uint64_t *)(object+0x118)=sticker?47:1;
-        *(uint64_t *)(object+0x1c8)=sticker?file_size:request.text_length;
+        *(uint64_t *)(object+0x118)=bridge_message_type(media_kind);
+        *(uint64_t *)(object+0x1c8)=media_kind?file_size:request.text_length;
         get_uuid(object,uuid);
         // 三个回调签名均为 void；本实现不捕获 UI 对象，只记录回调次数。
         uint64_t functions[3][8]={{0}};
@@ -168,7 +196,8 @@ __declspec(dllexport) DWORD WINAPI ExecuteJob(void *unused) {
         ((ContextConstructor)(core+BRIDGE_CONTEXT_RVA))(context,functions[0],functions[1],functions[2],empty_pair,
             request_id);
         if (*(uint64_t *)(object+0xc0)!=request.recipient_length||
-            (sticker?*(uint64_t *)(object+0x130)!=(uint64_t)path_length:*(uint64_t *)(object+0x768)!=request.text_length)||
+            (media_kind?*(uint64_t *)(object+0x130)!=(uint64_t)path_length:*(uint64_t *)(object+0x768)!=request.text_length)||
+            (media_kind==BRIDGE_MEDIA_FILE&&*(uint64_t *)(object+0x1b8)!=filename_length)||
             !*(uintptr_t *)(context+0x48)||!*(uintptr_t *)(context+0x88)||!*(uintptr_t *)(context+0xc8)||!uuid[0]) {
             stage="constructed_layout_mismatch";goto guarded_done;
         }

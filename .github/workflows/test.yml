@@ -13,9 +13,29 @@ jobs:
         with:
           node-version: '22'
       - uses: actions/setup-python@v5
+        id: python
         with:
           python-version: '3.12'
           architecture: 'x64'
+      - name: Install Zig for standalone C tests
+        shell: pwsh
+        run: |
+          $archive = Join-Path $env:RUNNER_TEMP 'zig-0.17.0.zip'
+          $toolchain = Join-Path $env:RUNNER_TEMP 'zig'
+          Invoke-WebRequest 'https://ziglang.org/download/0.17.0/zig-x86_64-windows-0.17.0.zip' -OutFile $archive
+          if ((Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash -ne 'b5663f69581dcf391293fbf16c06cb80d81d806545ce618b4d0bab7f0eb8c428') {
+            throw 'Zig archive checksum mismatch'
+          }
+          Expand-Archive -LiteralPath $archive -DestinationPath $toolchain
+          $zig = Join-Path $toolchain 'zig-x86_64-windows-0.17.0/zig.exe'
+          if ((& $zig version) -ne '0.17.0') { throw 'Unexpected Zig version' }
+          "ZIG_EXE=$zig" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - run: python -m pip install -r requirements.txt
       - run: node --test
-      - run: python -X utf8 -m unittest discover -s test -p '*_test.py'
+        env:
+          WECHAT_DIRECT_PYTHON: ${{ steps.python.outputs.python-path }}
+      - name: Run offline Python and native input tests
+        env:
+          # Core layout checks remain opt-in on a controlled local machine.
+          WECHAT_TEST_CORE: ''
+        run: python -X utf8 -m unittest discover -s test -p '*_test.py' -v

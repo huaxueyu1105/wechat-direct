@@ -22,11 +22,12 @@ class Operations:
         row=self.db.execute('SELECT body FROM operations WHERE keyhash=?',(self.key(key),)).fetchone()
         return json.loads(row[0]) if row else None
     def reserve(self,key,account,recipient,text,process_identity,baseline,maximum=1024,reply_scene=None,
-                sticker=None,sticker_mode='contextual',sticker_scene='serious'):
+                sticker=None,sticker_mode='contextual',sticker_scene='serious',attachment=None):
         keyhash=self.key(key)
         request=[account,recipient,text]
         if reply_scene is not None:request.append({'replyScene':reply_scene})
         if sticker is not None:request.append({'stickerId':sticker['stickerId'],'mode':sticker_mode,'scene':sticker_scene})
+        if attachment is not None:request.append({k:attachment[k] for k in ('kind','sourcePath','sha256','fileName')})
         fingerprint=hashlib.sha256(json.dumps(request,ensure_ascii=False).encode()).hexdigest()
         self.db.execute('BEGIN IMMEDIATE')
         try:
@@ -53,6 +54,7 @@ class Operations:
             if sticker is not None:
                 item.update(kind=sticker.get('kind','sticker'),sticker=sticker,stickerMode=sticker_mode,stickerScene=sticker_scene)
                 if item['kind']=='builtin':item['text']=sticker['text']
+            if attachment is not None:item.update(kind=attachment['kind'],attachment=attachment)
             self.db.execute('INSERT INTO operations VALUES (?,?,?,?,?,?,?)',
                 (keyhash,fingerprint,account,recipient,'reserved',process_identity,json.dumps(item,ensure_ascii=False)))
             self.db.commit();return item,True

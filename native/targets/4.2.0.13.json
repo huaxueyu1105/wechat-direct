@@ -11,13 +11,21 @@
     "TYPE_DESCRIPTOR": "0xb659250",
     "IMAGE_CONSTRUCTOR_RVA": "0x1ad16e0",
     "IMAGE_CONTROL_VTABLE": "0x93c1e08",
-    "IMAGE_VTABLE": "0x93c1e98"
+    "IMAGE_VTABLE": "0x93c1e98",
+    "FILE_CONSTRUCTOR_RVA": "0xbe49c0",
+    "FILE_CONTROL_VTABLE": "0x91dd338",
+    "FILE_VTABLE": "0x91dd2c8"
   },
+  "mediaCapabilities": {"image": true, "file": true},
   "validation": {
     "rttiAndFunctionLayout": "verified-statically-2026-11-06",
     "databaseRead": "verified-2026-11-06",
     "nativePreparation": "verified-no-submission-text-and-image-2026-11-06",
-    "textSendServerRecord": "not-tested-on-this-client",
-    "stickerSendServerRecord": "not-tested-on-this-client"
+    "textSendServerRecord": "verified-filehelper-single-message-2026-11-09",
+    "stickerSendServerRecord": "not-tested-on-this-client",
+    "imageAndFileLayout": "verified-statically-from-official-core-2026-11-09",
+    "imageAndFilePreparation": "verified-no-submission-2026-11-09",
+    "imageSendServerRecord": "verified-filehelper-single-png-2026-11-09",
+    "fileSendServerRecord": "verified-filehelper-single-txt-2026-11-09"
   }
 }
