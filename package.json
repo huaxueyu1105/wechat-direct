@@ -1,9 +1,9 @@
 {
   "name": "local-wechat-direct-adapter",
-  "version": "2.5.0-dev.2",
+  "version": "2.5.0-dev.3",
   "private": true,
   "type": "module",
-  "description": "Personal-account direct WeChat 4.2.0.13 Codex plugin; native preflight before first submission",
+  "description": "Local MCP integration for personal-account WeChat 4.2.0.13 on Windows",
   "scripts": {
     "test": "node --test",
     "doctor": "node src/doctor.mjs"

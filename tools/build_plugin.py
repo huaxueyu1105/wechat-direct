@@ -64,8 +64,9 @@ market={'name':'local-wechat-direct','interface':{'displayName':'微信原号直
     'policy':{'installation':'AVAILABLE','authentication':'ON_INSTALL'},'category':'Productivity'}]}
 catalog=bundle/'.agents/plugins';catalog.mkdir(parents=True,exist_ok=True)
 (catalog/'marketplace.json').write_text(json.dumps(market,ensure_ascii=False,indent=2),encoding='utf8')
-for name in ('install.mjs','install.cmd','使用说明.md'):
+for name in ('install.mjs','install.cmd','mcp-config.mjs','使用说明.md'):
     shutil.copyfile(ROOT/'packaging'/name,bundle/name)
+shutil.copyfile(ROOT/'docs/clients.md',bundle/'其他 AI 客户端.md')
 archive=ROOT/f'release/wechat-direct-{VERSION}-windows-x64.zip'
 entries=[]
 with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as output:

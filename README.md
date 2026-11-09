@@ -1,8 +1,8 @@
 # 微信直连 / wechat-direct
 
-面向 Windows x64 的本机微信 Codex 插件。通过本机数据库读取联系人、会话和消息，通过原生驱动按授权发送文字、表情、普通图片和文件，并支持本地定时任务。保留当前个人账号和聊天记录。
+面向 Windows x64 的本机微信 MCP 插件，支持 Codex、Kimi Code、Gemini CLI、Claude Desktop、Claude Code，以及通过 OpenCode 或 Claude Code 使用 DeepSeek。通过本机数据库读取联系人、会话和消息，通过原生驱动按授权发送文字、表情、普通图片和文件，并支持本地定时任务。保留当前个人账号和聊天记录。
 
-当前本地开发版 **2.5.0-dev.2**，适配微信 **4.2.0.13**。项目采用 [MIT 许可证](LICENSE)，第三方组件保留各自许可证，见 [第三方说明](THIRD_PARTY_NOTICES.md)。这是独立项目，与腾讯或微信官方没有隶属关系。
+当前开发版 **2.5.0-dev.3**，适配微信 **4.2.0.13**。项目采用 [MIT 许可证](LICENSE)，第三方组件保留各自许可证，见 [第三方说明](THIRD_PARTY_NOTICES.md)。这是独立项目，与腾讯或微信官方没有隶属关系。
 
 ## 当前状态
 
@@ -15,9 +15,10 @@
 
 ## 安装
 
-公开 Releases 中的 2.4.2 不包含本开发版的新功能。使用本开发版需按下文构建完整安装包，然后解压运行 `install.cmd`。需要已安装 Codex 桌面应用及 Python 3.12 x64、Node.js 22 或更高版本；安装器优先查找 Codex 提供的运行时。
+使用 2.5.0-dev.3 或更新的完整 Windows 安装包，可在 [Releases](https://github.com/huaxueyu1105/wechat-direct/releases) 查找，或按下文从源码构建。运行环境需要 Python 3.12 x64 和 Node.js 22 或更高版本。
 
-首次安装前正常登录微信；已有绑定可离线更新。运行时也可通过 `WECHAT_DIRECT_PYTHON`、`WECHAT_DIRECT_NODE` 显式指定。安装后在新对话选择“微信直连”。安装和更新不发送测试消息。若尚无 Release，可按下文从源码构建。
+- **Codex** 用户解压后运行 `install.cmd`，在新对话选择“微信直连”。首次安装前正常登录微信，已有绑定可离线更新。安装器优先使用 Codex 提供的运行时。
+- **其他客户端** 在解压目录运行 `node .\mcp-config.mjs <客户端>` 生成配置。默认仅查询，明确需要发送等操作时加 `--full-access`。 [各客户端配置方法](docs/clients.md)
 
 ## 从源码构建
 
@@ -37,7 +38,7 @@ Copy-Item native/direct-bridge-4.2.0.13.dll plugin/runtime/native/direct-bridge-
 py -3.12 -X utf8 tools/build_plugin.py
 ```
 
-把 `--core`、`--zig` 改为实际文件路径。默认核心路径也可在 `config/native-target.json` 调整；核心 SHA-256 必须与版本配置一致。安装包输出至 `release/wechat-direct-2.5.0-dev.2-windows-x64.zip`。必须重新编译驱动并运行打包步骤刷新 `runtime/support.json`，不能只把新增 Python 文件覆盖到旧安装目录。需要额外静态分析工具时，安装 `tools/requirements.txt`。
+把 `--core`、`--zig` 改为实际文件路径。默认核心路径也可在 `config/native-target.json` 调整；核心 SHA-256 必须与版本配置一致。安装包输出至 `release/wechat-direct-2.5.0-dev.3-windows-x64.zip`。必须重新编译驱动并运行打包步骤刷新 `runtime/support.json`，不能只把新增 Python 文件覆盖到旧安装目录。需要额外静态分析工具时，安装 `tools/requirements.txt`。
 
 ## 使用
 

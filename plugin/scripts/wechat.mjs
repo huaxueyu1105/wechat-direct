@@ -1,22 +1,30 @@
 import {spawn, spawnSync} from 'node:child_process';
 import {existsSync, readFileSync} from 'node:fs';
 import {homedir} from 'node:os';
-import {join} from 'node:path';
+import {isAbsolute, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const backend = fileURLToPath(new URL('./wechat.py', import.meta.url));
 let python;
 export function pythonPath() {
   if (python) return python;
-  const candidates = [process.env.WECHAT_DIRECT_PYTHON,
-    join(homedir(), '.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe')].filter(Boolean);
-  for (const candidate of candidates) {
-    if (!existsSync(candidate)) continue;
-    const result = spawnSync(candidate, ['-c', 'import sys,struct;print(f"{sys.version_info.major}.{sys.version_info.minor}:{struct.calcsize(\'P\')*8}")'],
+  const candidates = [
+    [process.env.WECHAT_DIRECT_PYTHON],
+    [join(homedir(), '.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe')],
+    ['py', '-3.12'],
+    ['python'],
+  ];
+  for (const [command, ...args] of candidates) {
+    if (!command || (isAbsolute(command) && !existsSync(command))) continue;
+    const probe = 'import struct,sys; assert sys.version_info[:2] == (3,12) and struct.calcsize("P") == 8; print(sys.executable)';
+    const result = spawnSync(command, [...args, '-I', '-X', 'utf8', '-c', probe],
       {encoding:'utf8',windowsHide:true,timeout:5000});
-    if (result.status === 0 && result.stdout.trim() === '3.12:64') return python = candidate;
+    const executable = result.stdout?.trim();
+    if (result.status === 0 && executable && isAbsolute(executable) && existsSync(executable)) {
+      return python = executable;
+    }
   }
-  throw new Error('未找到 Python 3.12 x64。请配置 WECHAT_DIRECT_PYTHON，或使用本机 Codex 附带的 Python。');
+  throw new Error('未找到 Python 3.12 x64。请安装后配置 WECHAT_DIRECT_PYTHON 为 python.exe 的绝对路径。');
 }
 export async function invoke(request) {
   if (request.action === 'worker-status' || request.action === 'worker-stop') {
