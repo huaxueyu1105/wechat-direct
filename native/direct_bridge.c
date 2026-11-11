@@ -190,7 +190,7 @@ __declspec(dllexport) DWORD WINAPI ExecuteJob(void *unused) {
         uint64_t functions[3][8]={{0}};
         for (int i=0;i<3;i++) { functions[i][0]=(uintptr_t)callback_vtable;functions[i][7]=(uintptr_t)functions[i]; }
         uint64_t empty_pair[2]={0};
-        // 原生调用者在 0xf055..0xf066 对此 64 位计数器递增；它是请求编号，不是常量或指针。
+        // 原生调用者递增此 64 位请求计数器。准备检查只读取当前编号。
         request_id=will_send?(uint64_t)InterlockedIncrement64((volatile LONG64 *)(core+BRIDGE_REQUEST_COUNTER)):
             *(uint64_t *)(core+BRIDGE_REQUEST_COUNTER);
         ((ContextConstructor)(core+BRIDGE_CONTEXT_RVA))(context,functions[0],functions[1],functions[2],empty_pair,

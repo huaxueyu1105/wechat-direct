@@ -1,6 +1,6 @@
 # 在其他 AI 客户端连接微信直连
 
-在运行微信的同一台 Windows x64 电脑上，解压 **2.5.0-dev.3** 或更新的完整安装包。需要微信 4.2.0.13、Node.js 22+ 和 Python 3.12 x64。直接从解压目录运行 `mcp-config.mjs` 即可使用本地 MCP，无需运行用于注册 Codex 的 `install.cmd`。从源码运行时，先按 README 构建安装包，或使用同样构建好的 `plugin/` 运行时。
+在运行微信的同一台 Windows x64 电脑上，解压 **2.5.0-dev.4** 的完整安装包。需要微信 4.2.0.52、Node.js 22+ 和 Python 3.12 x64。直接从解压目录运行 `mcp-config.mjs` 即可使用本地 MCP，无需运行用于注册 Codex 的 `install.cmd`。从源码运行时，先按 README 构建安装包，或使用同样构建好的 `plugin/` 运行时。
 
 ## 生成配置
 

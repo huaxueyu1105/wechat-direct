@@ -34,6 +34,14 @@ class ClientSelectionTests(unittest.TestCase):
             with self.assertRaises(PluginError) as caught:client.live()
         self.assertEqual(caught.exception.code,'ACCOUNT_NOT_READY')
 
+    def test_reader_loads_the_account_config_layout_for_its_profile(self):
+        with tempfile.TemporaryDirectory() as folder:
+            client = WeChat(folder)
+            client.support['accountConfigPointerBack'] = '0x130'
+            self.assertEqual(client.module().CFG_PTR_BACK, 0x130)
+            del client.support['accountConfigPointerBack']
+            self.assertEqual(client.module().CFG_PTR_BACK, 0x138)
+
 
 class NativePreparationTests(unittest.TestCase):
     def setUp(self):

@@ -1,26 +1,28 @@
 {
-  "clientVersion": "4.2.0.13",
-  "corePath": "C:\\Program Files\\Tencent\\Weixin\\4.2.0.13\\Weixin.dll",
-  "coreSha256": "afe3d02c58bada3c35009c0cd58ee1f57b2a00fe53237d0dce649107fddb9a20",
+  "clientVersion": "4.2.0.52",
+  "corePath": "C:\\Program Files\\Tencent\\Weixin\\4.2.0.52\\Weixin.dll",
+  "coreSha256": "d733489eea0b62af77e1aa61ba645cd941583d2a64fb2d7572da818d285f8d84",
   "transport": "direct-only",
   "accountMode": "existing-personal-account",
   "uiAutomationAllowed": false,
-  "nativeRuntimeValidated": true,
+  "nativeRuntimeValidated": false,
   "sendEnabled": true,
-  "status": "database-and-native-preparation-verified",
+  "status": "database-verified-native-loading-blocked",
   "runtimeValidatedParts": [
     "bound-original-account",
-    "contact-and-message-read",
-    "text-native-preparation-no-submission",
-    "image-native-preparation-no-submission"
+    "contacts-sessions-messages-and-cursor-read",
+    "sticker-directory-read"
   ],
   "runtimeUnvalidatedParts": [
+    "native-preparation",
     "new-client-text-server-record",
     "new-client-sticker-server-record",
+    "new-client-image-server-record",
+    "new-client-file-server-record",
     "batch-send-load-testing"
   ],
-  "validationScope": "4.2.0.13 database reads and native text/image preparation passed; actual submission not tested",
-  "nativeBridgeFile": "native/direct-bridge-4.2.0.13.dll",
+  "validationScope": "4.2.0.52 core layout and live database reads verified. Windows Smart App Control blocked the unsigned driver before native preparation.",
+  "nativeBridgeFile": "native/direct-bridge-4.2.0.52.dll",
   "testMessageSubmitted": false,
   "testSendVerified": false
 }

@@ -29,6 +29,8 @@ support={'builtinCatalogSha256':hashlib.sha256((SOURCE/'runtime/builtin-expressi
     'platform':'windows-x64','python':'3.12-x64','maxSendOperationsPerClientProcess':1024,
     'nativeValidation':profile['validation'],'preflightBeforeFirstSubmission':True,
     'mediaCapabilities':profile.get('mediaCapabilities',{'image':False,'file':False})}
+if 'accountConfigPointerBack' in profile:
+    support['accountConfigPointerBack'] = profile['accountConfigPointerBack']
 (SOURCE/'runtime/support.json').write_text(json.dumps(support,indent=2)+'\n',encoding='utf8')
 if args.prepare_only:
     print(json.dumps({'clientVersion':support['clientVersion'],'supportPrepared':True}));raise SystemExit(0)

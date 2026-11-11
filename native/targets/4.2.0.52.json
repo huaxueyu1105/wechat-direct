@@ -1,0 +1,32 @@
+{
+  "clientVersion": "4.2.0.52",
+  "coreSha256": "d733489eea0b62af77e1aa61ba645cd941583d2a64fb2d7572da818d285f8d84",
+  "accountConfigPointerBack": "0x130",
+  "constants": {
+    "CONSTRUCTOR_RVA": "0x775fa0",
+    "CONTEXT_RVA": "0xf590",
+    "SEND_RVA": "0x196ed70",
+    "VECTOR_VTABLE": "0x93e40e8",
+    "MESSAGE_CONTROL_VTABLE": "0x912a3d8",
+    "REQUEST_COUNTER": "0xb437658",
+    "TYPE_DESCRIPTOR": "0xb5a8da0",
+    "IMAGE_CONSTRUCTOR_RVA": "0x1a0e710",
+    "IMAGE_CONTROL_VTABLE": "0x93b3c28",
+    "IMAGE_VTABLE": "0x93b3cb8",
+    "FILE_CONSTRUCTOR_RVA": "0xbb96d0",
+    "FILE_CONTROL_VTABLE": "0x91d6a68",
+    "FILE_VTABLE": "0x91d69f8"
+  },
+  "mediaCapabilities": {"image": true, "file": true},
+  "validation": {
+    "rttiAndFunctionLayout": "verified-statically-2026-11-11",
+    "databaseRead": "verified-2026-11-11",
+    "nativePreparation": "blocked-by-windows-app-control-2026-11-11",
+    "imageAndFileLayout": "verified-statically-from-official-core-2026-11-11",
+    "imageAndFilePreparation": "pending-driver-loading",
+    "textSendServerRecord": "not-tested-on-this-client",
+    "stickerSendServerRecord": "not-tested-on-this-client",
+    "imageSendServerRecord": "not-tested-on-this-client",
+    "fileSendServerRecord": "not-tested-on-this-client"
+  }
+}

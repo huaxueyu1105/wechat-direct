@@ -1,4 +1,5 @@
 """Offline native media contract tests; never load Weixin.dll or the bridge DLL."""
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -63,21 +64,38 @@ int main(void) {
             result=subprocess.run([str(executable)],capture_output=True,text=True)
             self.assertEqual(result.returncode,0,result.stdout+result.stderr)
 
-    def test_exact_core_layout_and_wrong_file_vtable_rejection(self):
-        core=os.environ.get('WECHAT_TEST_CORE')
-        if not core:self.skipTest('Set WECHAT_TEST_CORE to a static 4.2.0.13 DLL file')
-        profile_path=ROOT/'native/targets/4.2.0.13.json'
-        command=[sys.executable,str(ROOT/'tools/build_bridge.py'),'--verify-only','--core',core,'--profile']
-        result=subprocess.run(command+[str(profile_path)],capture_output=True,text=True)
-        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
-        profile=json.loads(profile_path.read_text(encoding='utf8'))
-        profile['constants']['FILE_CONTROL_VTABLE']=profile['constants']['IMAGE_CONTROL_VTABLE']
+    def test_exact_core_layout_rejects_wrong_addresses(self):
+        core = os.environ.get('WECHAT_TEST_CORE')
+        if not core:
+            self.skipTest('Set WECHAT_TEST_CORE to a supported Weixin.dll with image and file support')
+        with Path(core).open('rb') as stream:
+            digest = hashlib.file_digest(stream, 'sha256').hexdigest()
+        for profile_path in (ROOT / 'native/targets').glob('*.json'):
+            profile = json.loads(profile_path.read_text(encoding='utf8'))
+            if profile['coreSha256'] == digest and profile.get('mediaCapabilities', {}).get('file'):
+                break
+        else:
+            self.fail('WECHAT_TEST_CORE does not match a profile with file support')
+
+        command = [sys.executable, '-X', 'utf8', str(ROOT / 'tools/build_bridge.py'),
+                   '--verify-only', '--core', core, '--profile']
+        result = subprocess.run(command + [str(profile_path)], capture_output=True, encoding='utf-8')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        constants = profile['constants']
+        cases = (
+            ('FILE_CONTROL_VTABLE', constants['IMAGE_CONTROL_VTABLE'], 'File source constructor or vtable mismatch'),
+            ('IMAGE_CONSTRUCTOR_RVA', constants['CONSTRUCTOR_RVA'], 'Ordinary image constructor mismatch'),
+            ('REQUEST_COUNTER', hex(int(constants['REQUEST_COUNTER'], 0) + 8), 'Request counter relocation mismatch'),
+        )
         with tempfile.TemporaryDirectory(dir=ROOT.parent) as folder:
-            wrong=Path(folder)/'wrong-target.json'
-            wrong.write_text(json.dumps(profile),encoding='utf8')
-            result=subprocess.run(command+[str(wrong)],capture_output=True,text=True)
-            self.assertNotEqual(result.returncode,0)
-            self.assertIn('File source constructor or vtable mismatch',result.stderr)
+            wrong = Path(folder) / 'wrong-target.json'
+            for field, value, error in cases:
+                with self.subTest(field=field):
+                    invalid = {**profile, 'constants': {**constants, field: value}}
+                    wrong.write_text(json.dumps(invalid), encoding='utf8')
+                    result = subprocess.run(command + [str(wrong)], capture_output=True, encoding='utf-8')
+                    self.assertNotEqual(result.returncode, 0)
+                    self.assertIn(error, result.stderr)
 
 
 if __name__=='__main__':unittest.main()

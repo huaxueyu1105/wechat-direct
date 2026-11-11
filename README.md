@@ -2,7 +2,7 @@
 
 面向 Windows x64 的本机微信 MCP 插件，支持 Codex、Kimi Code、Gemini CLI、Claude Desktop、Claude Code，以及通过 OpenCode 或 Claude Code 使用 DeepSeek。通过本机数据库读取联系人、会话和消息，通过原生驱动按授权发送文字、表情、普通图片和文件，并支持本地定时任务。保留当前个人账号和聊天记录。
 
-当前开发版 **2.5.0-dev.3**，适配微信 **4.2.0.13**。项目采用 [MIT 许可证](LICENSE)，第三方组件保留各自许可证，见 [第三方说明](THIRD_PARTY_NOTICES.md)。这是独立项目，与腾讯或微信官方没有隶属关系。
+当前开发版 **2.5.0-dev.4**，适配微信 **4.2.0.52**。项目采用 [MIT 许可证](LICENSE)，第三方组件保留各自许可证，见 [第三方说明](THIRD_PARTY_NOTICES.md)。这是独立项目，与腾讯或微信官方没有隶属关系。
 
 ## 当前状态
 
@@ -10,12 +10,12 @@
 - 109 个内置表情编码；单个图片/动图只从当前账号添加目录同步，并核对目录成员和原始摘要。
 - 发送使用稳定 `operationKey` 防止重复提交。`unknown` / `submitted` 结果需查询原操作；`confirmed` 表示匹配到新的服务器记录，不代表已读。
 - 微信核心文件摘要和账号绑定不匹配时拒绝操作。每个微信进程首次文字、表情、图片或文件提交前，分别执行不发送的对象准备检查。
-- 前一开发版 dev.1 已在微信 4.2.0.13 的文件传输助手中实测文字、静态 PNG、TXT 文件和一次性定时文字，各自匹配到新的服务器记录。本版维护修复已做离线回归，尚未重新实机验收。表情发送、JPEG、大文件、其他联系人/群聊及循环任务仍未实机验收。详见 [验证范围](TEST_STATUS.md)。
+- 微信 4.2.0.52 的核心摘要、文字及媒体原生布局和 109 个内置表情已核对，原绑定账号的读取通过。本机 Windows 智能应用控制拦截了未签名驱动，发送前自检及真实发送待验收。实机检查记录见 [验证范围](TEST_STATUS.md)。
 - 数据库快照只应用校验通过的已提交 WAL；轮询游标记录各分片位置，避免同序号消息漏读或卡页。未变化分片复用表索引，减少重复解密无关数据库。
 
 ## 安装
 
-使用 2.5.0-dev.3 或更新的完整 Windows 安装包，可在 [Releases](https://github.com/huaxueyu1105/wechat-direct/releases) 查找，或按下文从源码构建。运行环境需要 Python 3.12 x64 和 Node.js 22 或更高版本。
+使用适配当前微信版本的完整 Windows 安装包，或按下文从源码构建。运行环境需要 Python 3.12 x64 和 Node.js 22 或更高版本。已发布的安装包可在 [Releases](https://github.com/huaxueyu1105/wechat-direct/releases) 查找。
 
 - **Codex** 用户解压后运行 `install.cmd`，在新对话选择“微信直连”。首次安装前正常登录微信，已有绑定可离线更新。安装器优先使用 Codex 提供的运行时。
 - **其他客户端** 在解压目录运行 `node .\mcp-config.mjs <客户端>` 生成配置。默认仅查询，明确需要发送等操作时加 `--full-access`。 [各客户端配置方法](docs/clients.md)
@@ -31,14 +31,14 @@ $env:PYTHONPATH = (Resolve-Path tools/python-deps).Path
 $env:WECHAT_DIRECT_PYTHON = (py -3.12 -c 'import sys; print(sys.executable)')
 node --test
 py -3.12 -X utf8 -m unittest discover -s test -p '*_test.py'
-py -3.12 -X utf8 tools/build_bridge.py --core 'C:\Program Files\Tencent\Weixin\4.2.0.13\Weixin.dll' --zig 'C:\Tools\zig\zig.exe'
+py -3.12 -X utf8 tools/build_bridge.py --core 'C:\Program Files\Tencent\Weixin\4.2.0.52\Weixin.dll' --zig 'C:\Tools\zig\zig.exe'
 New-Item -ItemType Directory -Path plugin/runtime/native -Force | Out-Null
-Copy-Item native/direct-bridge-4.2.0.13.dll plugin/runtime/native/direct-bridge-v2.dll
-Copy-Item native/direct-bridge-4.2.0.13.dll plugin/runtime/native/direct-bridge-v3.dll
+Copy-Item native/direct-bridge-4.2.0.52.dll plugin/runtime/native/direct-bridge-v2.dll
+Copy-Item native/direct-bridge-4.2.0.52.dll plugin/runtime/native/direct-bridge-v3.dll
 py -3.12 -X utf8 tools/build_plugin.py
 ```
 
-把 `--core`、`--zig` 改为实际文件路径。默认核心路径也可在 `config/native-target.json` 调整；核心 SHA-256 必须与版本配置一致。安装包输出至 `release/wechat-direct-2.5.0-dev.3-windows-x64.zip`。必须重新编译驱动并运行打包步骤刷新 `runtime/support.json`，不能只把新增 Python 文件覆盖到旧安装目录。需要额外静态分析工具时，安装 `tools/requirements.txt`。
+把 `--core`、`--zig` 改为实际文件路径。默认核心路径也可在 `config/native-target.json` 调整，核心 SHA-256 必须与版本配置一致。安装包输出至 `release/wechat-direct-2.5.0-dev.4-windows-x64.zip`。重新编译驱动后运行打包步骤，刷新 `runtime/support.json` 中的组件摘要。需要额外静态分析工具时，安装 `tools/requirements.txt`。
 
 ## 使用
 

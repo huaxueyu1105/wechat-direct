@@ -1,6 +1,6 @@
 {
-  "clientVersion": "4.2.0.13",
-  "coreSha256": "afe3d02c58bada3c35009c0cd58ee1f57b2a00fe53237d0dce649107fddb9a20",
+  "clientVersion": "4.2.0.52",
+  "coreSha256": "d733489eea0b62af77e1aa61ba645cd941583d2a64fb2d7572da818d285f8d84",
   "source": "client embedded emoji-panel and newemoji resources",
   "items": [
     {
@@ -1860,6 +1860,6 @@
   "verification": {
     "classicCodesAndLabels": "verified in client emoji-panel constants",
     "modernCodesAndLabels": "verified against embedded newemoji-config.xml",
-    "modernResourceFileOffset": "0x875736b"
+    "modernResourceFileOffset": "0x86ebb6b"
   }
 }

@@ -66,6 +66,9 @@ class WeChat:
         sys.modules['wechatauto']=package;sys.modules['wechatauto.logger']=logger
         spec=importlib.util.spec_from_file_location('wechat_direct_readonly_db',source)
         module=importlib.util.module_from_spec(spec);sys.modules[spec.name]=module;spec.loader.exec_module(module)
+        pointer_back = self.support.get('accountConfigPointerBack')
+        if pointer_back is not None:
+            module.CFG_PTR_BACK = int(pointer_back, 0)
         return module
     def live(self,allow_unbound=False,selector=None):
         if self._live and selector is None:return self._live
